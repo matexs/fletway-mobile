@@ -1,0 +1,48 @@
+# ---- Flutter / Dart ----
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+build/
+.pub-cache/
+.pub/
+pubspec.lock          # app: se regenera; descomentar si se quiere fijar
+doc/api/
+*.g.dart.lock
+
+# Código generado (se regenera con build_runner)
+*.g.dart
+*.freezed.dart
+*.mocks.dart
+
+# ---- Entorno / secretos ----
+.env
+.env.*
+!.env.example
+*.jks
+*.keystore
+key.properties
+ios/Runner/GoogleService-Info.plist
+android/app/google-services.json
+lib/**/secrets.dart
+
+# ---- Plataforma (se regeneran con `flutter create .`) ----
+# Si el equipo decide versionar android/ ios/ etc., quitar estas líneas.
+# android/
+# ios/
+# linux/
+# macos/
+# windows/
+# web/
+
+# ---- IDE / SO ----
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.iml
+.DS_Store
+Thumbs.db
+
+# ---- Claude Code ----
+.claude/settings.local.json
+.claude/*.local.md

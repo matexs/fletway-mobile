@@ -1,0 +1,7 @@
+# Este archivo lo gestiona Flutter. NO editar a mano.
+# Se completa al correr `flutter create .` sobre este directorio.
+version:
+  revision: null
+  channel: stable
+
+project_type: app
