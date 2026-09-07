@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# Hook de pre-commit para fletway-mobile.
+# Instalar: cp scripts/pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
+set -euo pipefail
+
+echo "› dart format (check)"
+dart format --output=none --set-exit-if-changed lib test
+
+echo "› flutter analyze"
+flutter analyze
+
+echo "› custom_lint (riverpod_lint)"
+dart run custom_lint
+
+echo "› flutter test"
+flutter test
+
+echo "✓ pre-commit OK"

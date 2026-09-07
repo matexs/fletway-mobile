@@ -1,21 +1,57 @@
-# ---- Flutter / Dart ----
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.build/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may wish to be included in version control, so this line
+# is commented out by default.
+#.vscode/
+
+# Flutter/Dart/Pub related
+**/doc/api/
+**/ios/Flutter/.last_build_id
 .dart_tool/
-.flutter-plugins
 .flutter-plugins-dependencies
-.packages
-build/
 .pub-cache/
 .pub/
-pubspec.lock          # app: se regenera; descomentar si se quiere fijar
-doc/api/
-*.g.dart.lock
+/build/
+/coverage/
 
-# Código generado (se regenera con build_runner)
-*.g.dart
-*.freezed.dart
-*.mocks.dart
+# Symbolication related
+app.*.symbols
 
-# ---- Entorno / secretos ----
+# Obfuscation related
+app.*.map.json
+
+# Android Studio will place build artifacts here
+/android/app/debug
+/android/app/profile
+/android/app/release
+
+# Widget Preview related
+.widget_preview/
+
+# ─────────────────────────────────────────────────────────────
+# Fletway — reglas propias
+# ─────────────────────────────────────────────────────────────
+
+# Entorno / secretos
 .env
 .env.*
 !.env.example
@@ -26,23 +62,13 @@ ios/Runner/GoogleService-Info.plist
 android/app/google-services.json
 lib/**/secrets.dart
 
-# ---- Plataforma (se regeneran con `flutter create .`) ----
-# Si el equipo decide versionar android/ ios/ etc., quitar estas líneas.
-# android/
-# ios/
-# linux/
-# macos/
-# windows/
-# web/
+# Código generado (se regenera con build_runner)
+*.g.dart
+*.freezed.dart
+*.mocks.dart
 
-# ---- IDE / SO ----
-.idea/
-.vscode/*
-!.vscode/extensions.json
-*.iml
-.DS_Store
-Thumbs.db
-
-# ---- Claude Code ----
+# Claude Code
 .claude/settings.local.json
 .claude/*.local.md
+
+# pubspec.lock SÍ se versiona (esto es una app, no un package).

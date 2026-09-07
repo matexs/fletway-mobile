@@ -6,8 +6,11 @@ analyzer:
   exclude:
     - "**/*.g.dart"
     - "**/*.freezed.dart"
-  plugins:
-    - custom_lint          # habilita riverpod_lint
+    - build/**
+    - android/**
+    - ios/**
+  # Las reglas de riverpod_lint se corren aparte con `dart run custom_lint`
+  # (el plugin embebido en el analyzer quedó deprecado). Ver README / pre-commit.
 
 linter:
   rules:
@@ -19,4 +22,5 @@ linter:
     - unawaited_futures
     - use_key_in_widget_constructors
     - directives_ordering
-    - require_trailing_commas
+    # `require_trailing_commas` se omite: el `dart format` de Dart 3.7+ ya
+    # gestiona las comas finales y la regla entra en conflicto con el formateo.

@@ -32,7 +32,7 @@ reglas toca la feature.
 ```
 lib/features/<area>/<feature>/
 ├── data/
-│   ├── <feature>_dto.dart          # placeholder: correr sync-api-models para completarlo
+│   ├── <feature>_dto.dart          # placeholder: correr sync-api-models (freezed 3: `abstract class`)
 │   └── <feature>_repository.dart
 ├── application/
 │   ├── <feature>_providers.dart

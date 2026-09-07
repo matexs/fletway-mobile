@@ -50,7 +50,7 @@ Reglas:
 
 | Carpeta | Contenido |
 |---------|-----------|
-| `config/` | `Env` — carga `.env` (`API_BASE_URL`, `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `APP_ENV`). |
+| `config/` | `Env` — carga `.env` (`API_BASE_URL`, `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY` (o `SUPABASE_ANON_KEY`), `APP_ENV`). |
 | `network/` | `ApiClient` (Dio configurado) + `AuthInterceptor` (agrega el JWT de la sesión Supabase a cada request) + `ApiException` (mapea el envelope de error único del backend `{error:{code,message}}`). |
 | `supabase/` | `SupabaseInit` / `supabaseClient` — inicializa `supabase_flutter`; expone helpers de streams para `mensaje` y `viaje_ubicacion`. |
 | `auth/` | `AppUser` (id, email, **rol**: `cliente` \| `transportista`), `AuthRepository` (login, registro, logout, refresh vía GoTrue), `authControllerProvider` (estado de sesión observado por el router). |

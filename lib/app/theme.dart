@@ -10,12 +10,15 @@ class FletwayTheme {
   static ThemeData get light => ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: _seed),
         useMaterial3: true,
-        inputDecorationTheme: const InputDecorationTheme(border: OutlineInputBorder()),
+        inputDecorationTheme:
+            const InputDecorationTheme(border: OutlineInputBorder()),
       );
 
   static ThemeData get dark => ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: _seed, brightness: Brightness.dark),
+        colorScheme:
+            ColorScheme.fromSeed(seedColor: _seed, brightness: Brightness.dark),
         useMaterial3: true,
-        inputDecorationTheme: const InputDecorationTheme(border: OutlineInputBorder()),
+        inputDecorationTheme:
+            const InputDecorationTheme(border: OutlineInputBorder()),
       );
 }

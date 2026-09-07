@@ -57,7 +57,7 @@ Listar qué endpoints/campos cambiaron desde la última sync (comparar contra
 
 ### 3. Escribir/actualizar las clases
 
-`freezed` + `json_serializable`:
+`freezed` (3.x) + `json_serializable`:
 
 ```dart
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -65,8 +65,9 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part '<archivo>.freezed.dart';
 part '<archivo>.g.dart';
 
+// Freezed 3: la clase se declara `abstract` (o `sealed` si es una unión).
 @freezed
-class Solicitud with _$Solicitud {
+abstract class Solicitud with _$Solicitud {
   const factory Solicitud({
     required String id,
     required String origen_direccion,
@@ -88,7 +89,7 @@ class Solicitud with _$Solicitud {
 ### 4. Regenerar
 
 ```bash
-dart run build_runner build --delete-conflicting-outputs
+dart run build_runner build
 ```
 
 ### 5. Actualizar `docs/API_CONTRATOS.md`

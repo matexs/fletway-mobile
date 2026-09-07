@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  analyze-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: pub get
+        run: flutter pub get
+
+      - name: codegen (freezed / json_serializable)
+        run: dart run build_runner build
+
+      - name: format check
+        run: dart format --output=none --set-exit-if-changed lib test
+
+      - name: analyze
+        run: flutter analyze
+
+      - name: custom_lint (riverpod_lint)
+        run: dart run custom_lint
+
+      - name: test
+        run: flutter test
+
+    # El .env real no está en el repo; los tests no deben depender de red ni de
+    # Supabase. Si algún test necesita config, usar un .env de fixture en test/.

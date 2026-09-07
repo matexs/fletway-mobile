@@ -16,7 +16,8 @@ class AuthSessionState {
 
   bool get isAuthenticated => user != null;
 
-  AuthSessionState copyWith({AppUser? user, bool? loading, bool clearUser = false}) =>
+  AuthSessionState copyWith(
+          {AppUser? user, bool? loading, bool clearUser = false}) =>
       AuthSessionState(
         user: clearUser ? null : (user ?? this.user),
         loading: loading ?? this.loading,

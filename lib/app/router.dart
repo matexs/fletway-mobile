@@ -26,7 +26,9 @@ final routerProvider = Provider<GoRouter>((ref) {
       }
 
       // Autenticado: mandar a la raíz del rol y no dejar entrar al árbol ajeno.
-      final home = auth.user!.role == UserRole.transportista ? '/transportista' : '/cliente';
+      final home = auth.user!.role == UserRole.transportista
+          ? '/transportista'
+          : '/cliente';
       if (loggingIn) return home;
 
       final enClienteArea = state.matchedLocation.startsWith('/cliente');
@@ -43,7 +45,8 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/registro/transportista',
-        builder: (_, __) => const _Placeholder('Registro Transportista (RF-16)'),
+        builder: (_, __) =>
+            const _Placeholder('Registro Transportista (RF-16)'),
       ),
 
       // --- Árbol Cliente (RF-05..RF-15) ---
@@ -53,15 +56,18 @@ final routerProvider = Provider<GoRouter>((ref) {
         routes: [
           GoRoute(
             path: 'solicitudes/nueva',
-            builder: (_, __) => const _Placeholder('Publicar solicitud (RF-06)'),
+            builder: (_, __) =>
+                const _Placeholder('Publicar solicitud (RF-06)'),
           ),
           GoRoute(
             path: 'solicitudes/:id/ofertas',
-            builder: (_, __) => const _Placeholder('Top 3 ofertas (RF-07 / RN-05)'),
+            builder: (_, __) =>
+                const _Placeholder('Top 3 ofertas (RF-07 / RN-05)'),
           ),
           GoRoute(
             path: 'viajes/:id',
-            builder: (_, __) => const _Placeholder('Viaje Cliente (RF-15 tracking, chat RI-05)'),
+            builder: (_, __) => const _Placeholder(
+                'Viaje Cliente (RF-15 tracking, chat RI-05)'),
           ),
         ],
       ),
@@ -73,15 +79,18 @@ final routerProvider = Provider<GoRouter>((ref) {
         routes: [
           GoRoute(
             path: 'habilitacion',
-            builder: (_, __) => const _Placeholder('Estado de habilitación (RF-01)'),
+            builder: (_, __) =>
+                const _Placeholder('Estado de habilitación (RF-01)'),
           ),
           GoRoute(
             path: 'solicitudes',
-            builder: (_, __) => const _Placeholder('Solicitudes compatibles (RF-17 / RN-04)'),
+            builder: (_, __) =>
+                const _Placeholder('Solicitudes compatibles (RF-17 / RN-04)'),
           ),
           GoRoute(
             path: 'viajes/:id',
-            builder: (_, __) => const _Placeholder('Viaje Transportista (PIN RF-22 / RN-06)'),
+            builder: (_, __) =>
+                const _Placeholder('Viaje Transportista (PIN RF-22 / RN-06)'),
           ),
         ],
       ),

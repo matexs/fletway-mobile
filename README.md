@@ -24,10 +24,10 @@ La lógica de negocio y el contrato de la API viven en el repo **`fletway-backen
 `flutter` no está incluido en el repo. Primera vez:
 
 ```bash
-flutter create .                 # genera android/ ios/ web/ … sin tocar lib/ ni pubspec.yaml
-cp .env.example .env             # completar SUPABASE_ANON_KEY y API_BASE_URL
+flutter create .                 # ya generado (android/ ios/); re-correr solo si hace falta
+cp .env.example .env             # completar SUPABASE_PUBLISHABLE_KEY y API_BASE_URL
 flutter pub get
-dart run build_runner build --delete-conflicting-outputs
+dart run build_runner build
 flutter run
 ```
 

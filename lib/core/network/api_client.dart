@@ -14,7 +14,8 @@ class ApiClient {
   ApiClient() : _dio = Dio(_baseOptions) {
     _dio.interceptors.add(AuthInterceptor());
     if (Env.isDev) {
-      _dio.interceptors.add(LogInterceptor(requestBody: true, responseBody: true));
+      _dio.interceptors
+          .add(LogInterceptor(requestBody: true, responseBody: true));
     }
   }
 

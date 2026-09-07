@@ -146,7 +146,9 @@ inicio y fin + GPS**, se paga con **comisión de plataforma**, y el Cliente deja
 
 ## 7. Estado del toolchain
 
-`flutter` **no estaba instalado** al momento del scaffolding. Las carpetas de
-plataforma (`android/`, `ios/`, `web/`, …) **no existen todavía**: hay que correr
-`flutter create .` desde la raíz (respeta `lib/`, `pubspec.yaml` y `test/` existentes)
-y luego `flutter pub get` + `dart run build_runner build`. Ver `docs/ESTADO_PROYECTO.md`.
+Flutter **3.47.2 / Dart 3.13.2** instalado en `C:\src\flutter`. El proyecto ya
+tiene `android/` + `ios/`, `pub get` corrido, `flutter analyze` sin issues y
+`build_runner` operativo. Versiones clave: **Riverpod 3**, **go_router 18**,
+**freezed 3** (clases `abstract class X with _$X`). El **Android SDK / emulador
+NO** está instalado — hace falta solo para `flutter run` en dispositivo, no para
+analyze / test / codegen. Detalle y próximos pasos en `docs/ESTADO_PROYECTO.md`.

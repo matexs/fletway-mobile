@@ -45,7 +45,8 @@ class ApiException implements Exception {
     );
   }
 
-  bool get isAuth => statusCode == 401 || code == 'no_autenticado' || code == 'token_invalido';
+  bool get isAuth =>
+      statusCode == 401 || code == 'no_autenticado' || code == 'token_invalido';
 
   @override
   String toString() => 'ApiException($code, $statusCode): $message';
