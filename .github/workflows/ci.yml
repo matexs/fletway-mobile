@@ -16,6 +16,12 @@ jobs:
           channel: stable
           cache: true
 
+      # .env está gitignoreado y pubspec.yaml lo declara como asset; sin él
+      # `flutter analyze` avisa `asset_does_not_exist` y sale con código 1.
+      # Se crea desde el ejemplo (sin secretos reales) — mismo paso que hace un dev local.
+      - name: preparar .env
+        run: cp .env.example .env
+
       - name: pub get
         run: flutter pub get
 
