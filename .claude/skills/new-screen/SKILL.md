@@ -73,7 +73,8 @@ chequeo de rol dentro de la screen. Rutas de chat/tracking van anidadas bajo
 
 | RF | La pantalla debe… |
 |----|-------------------|
-| RF-06 | mostrar la **cotización estimada** que devuelve la API como texto no editable (RN-01/RNF-04). |
+| RF-06 | **no** mostrar ningún precio al publicar la solicitud: no hay cotización estimada (RN-01/RNF-04, D-13 del backend). |
+| RF-07 | mostrar el `precio_calculado` de cada oferta como texto no editable, sin el desglose de costo (RN-01/RNF-04). |
 | RF-07 | listar **3** ofertas ordenadas por score; acción "ver más" para el resto (RN-05). |
 | RF-08 | antes de confirmar cancelación, mostrar si habrá **cargo de resarcimiento** (dato del backend) o no (RN-07). |
 | RF-12 | habilitar el formulario de reseña **solo** si el viaje está finalizado (PIN de fin validado — RN-06). |

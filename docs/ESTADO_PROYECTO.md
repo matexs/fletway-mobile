@@ -19,17 +19,17 @@ pantallas de negocio reales** todavía — solo el router con placeholders.
 
 | Área | Estado | Notas |
 |------|--------|-------|
-| Estructura de carpetas | ✅ | `lib/{app,core,shared,features/{auth,client,carrier}}`, `test/`, `docs/`, `.claude/`. |
-| `pubspec.yaml` | ✅ | Deps resueltas contra Flutter 3.47.2 / Dart 3.13.2: `flutter_riverpod ^3.1.0`, `go_router ^18.0.1`, `dio ^5.11.1`, `supabase_flutter ^2.17.2`, `geolocator ^14.0.3`, `freezed ^3.2.3`, etc. `pubspec.lock` versionado. |
-| Carpetas de plataforma | ✅ | `android/` + `ios/` generadas con `flutter create . --org com.fletway --platforms=android,ios`. |
-| `flutter analyze` | ✅ | **No issues found.** |
-| `build_runner` | ✅ | Corre OK (0 outputs — todavía no hay clases `freezed`/`json`). |
-| Esqueleto `lib/core/` + `lib/app/` | ✅ | `env` (con `SUPABASE_PUBLISHABLE_KEY` + fallback `SUPABASE_ANON_KEY`), `api_client` (Dio + `AuthInterceptor` con JWT de Supabase), `supabase_client` (Auth+Realtime, PKCE), `auth` (sesión + rol), `router` (go_router con redirect/guards por rol), `theme`, `main.dart`. |
-| Archivos de contexto | ✅ | `CLAUDE.md`, este archivo, `ARQUITECTURA.md`, `API_CONTRATOS.md`. |
-| Skills de Claude Code | ✅ | `new-screen`, `sync-api-models`, `feature-scaffold`. |
-| CI + pre-commit | ✅ | `.github/workflows/ci.yml` (pub get → codegen → format → analyze → custom_lint → test); `scripts/pre-commit`. |
-| Pantallas de negocio (Cliente / Transportista) | ❌ | El router tiene solo `_Placeholder`. |
-| Toolchain Android (SDK, emulador) | ❌ | No instalado. No hace falta para analyze/test/codegen; sí para `flutter run`. |
+| Estructura de carpetas | Hecho | `lib/{app,core,shared,features/{auth,client,carrier}}`, `test/`, `docs/`, `.claude/`. |
+| `pubspec.yaml` | Hecho | Deps resueltas contra Flutter 3.47.2 / Dart 3.13.2: `flutter_riverpod ^3.1.0`, `go_router ^18.0.1`, `dio ^5.11.1`, `supabase_flutter ^2.17.2`, `geolocator ^14.0.3`, `freezed ^3.2.3`, etc. `pubspec.lock` versionado. |
+| Carpetas de plataforma | Hecho | `android/` + `ios/` generadas con `flutter create . --org com.fletway --platforms=android,ios`. |
+| `flutter analyze` | Hecho | **No issues found.** |
+| `build_runner` | Hecho | Corre OK (0 outputs — todavía no hay clases `freezed`/`json`). |
+| Esqueleto `lib/core/` + `lib/app/` | Hecho | `env` (con `SUPABASE_PUBLISHABLE_KEY` + fallback `SUPABASE_ANON_KEY`), `api_client` (Dio + `AuthInterceptor` con JWT de Supabase), `supabase_client` (Auth+Realtime, PKCE), `auth` (sesión + rol), `router` (go_router con redirect/guards por rol), `theme`, `main.dart`. |
+| Archivos de contexto | Hecho | `CLAUDE.md`, este archivo, `ARQUITECTURA.md`, `API_CONTRATOS.md`. |
+| Skills de Claude Code | Hecho | `new-screen`, `sync-api-models`, `feature-scaffold`. |
+| CI + pre-commit | Hecho | `.github/workflows/ci.yml` (pub get → codegen → format → analyze → custom_lint → test); `scripts/pre-commit`. |
+| Pantallas de negocio (Cliente / Transportista) | Pendiente | El router tiene solo `_Placeholder`. |
+| Toolchain Android (SDK, emulador) | Pendiente | No instalado. No hace falta para analyze/test/codegen; sí para `flutter run`. |
 
 ---
 
