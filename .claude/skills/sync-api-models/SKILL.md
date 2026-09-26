@@ -72,9 +72,10 @@ abstract class Solicitud with _$Solicitud {
     required String id,
     required String origen_direccion,
     required String destino_direccion,
-    required bool requiere_escalera,
-    int? pisos_escalera,
-    required String cotizacion_estimada_monto,   // string decimal (D-11)
+    required int pisos_origen,
+    required bool ascensor_utilizable_origen,
+    required int pisos_destino,
+    required bool ascensor_utilizable_destino,
     required DateTime creado_en,
   }) = _Solicitud;
 

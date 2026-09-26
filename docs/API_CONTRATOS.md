@@ -4,7 +4,7 @@
 > el mapeo *endpoint del backend → feature / repo / modelo Dart* en esta app.
 > La skill `sync-api-models` lo mantiene alineado.
 
-**Última actualización:** 2026-09-07 · **Versión de contrato del backend:** `v0` (draft)
+**Última actualización:** 2026-09-26 · **Versión de contrato del backend:** `v0` (draft, `ENDPOINTS.md` del 2026-09-24)
 
 ---
 
@@ -39,11 +39,11 @@
 | RF-16 | `POST /auth/registro/transportista` | Transportista | `features/auth` | `RegistroTransportistaRequest`, `DocumentoUpload` |
 | (login) | Supabase Auth (GoTrue) directo | ambos | `core/auth` | `AppUser` |
 | RF-18 | `POST /transportista/vehiculos` | Transportista | `features/carrier/vehiculo` | `Vehiculo`, `TipoVehiculo` |
-| RF-06 / RN-01 / RN-02 | `POST /solicitudes` | Cliente | `features/client/solicitudes` | `Solicitud`, `SolicitudObjeto`, `CotizacionEstimada` |
+| RF-06 | `POST /solicitudes` | Cliente | `features/client/solicitudes` | `Solicitud`, `SolicitudObjeto` (sin monto: no hay cotización estimada, D-13 del backend) |
 | RF-06 / RN-08 | `GET /catalogo/objetos` | ambos | `shared` o `features/client/solicitudes` | `Objeto` |
 | RF-17 / RN-04 | `GET /transportista/solicitudes` | Transportista | `features/carrier/ofertar` | `SolicitudCompatible` |
-| RF-17 / RN-01 | `POST /solicitudes/{id}/ofertas` | Transportista | `features/carrier/ofertar` | `OfertaRequest`, `Oferta` |
-| RF-07 / RN-05 | `GET /solicitudes/{id}/ofertas` (top 3) | Cliente | `features/client/ofertas` | `OfertaConScore` |
+| RF-17 / RN-01 / RN-02 | `POST /solicitudes/{id}/ofertas` | Transportista | `features/carrier/ofertar` | `OfertaRequest` (`vehiculo_id`, `cantidad_ayudantes`), `Oferta` (precio y viajes calculados por el backend; error de validación si la carga no entra en el vehículo) |
+| RF-07 / RN-05 | `GET /solicitudes/{id}/ofertas` (top 3) | Cliente | `features/client/ofertas` | `OfertaConScore` (sólo `precio_calculado`, sin desglose de costo) |
 | RF-07 | `POST /ofertas/{id}/aceptar` | Cliente | `features/client/ofertas` | `Viaje` |
 | RF-08 / RN-07 | `POST /viajes/{id}/cancelar` | Cliente | `features/client/viaje` | `CancelacionResultado` (incluye si hubo cargo) |
 | RF-19 | `POST /viajes/{id}/cancelar` | Transportista | `features/carrier/viaje` | `CancelacionResultado` |

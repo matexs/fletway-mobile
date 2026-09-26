@@ -34,9 +34,10 @@ Lo que **no** se hace en este repo:
 ## 2. El negocio en 5 líneas
 
 Fletway conecta **Clientes** que necesitan trasladar objetos con **Transportistas**
-("fleteros") verificados. El Cliente publica una **solicitud**; el sistema le da una
-cotización estimada y notifica a Transportistas compatibles por zona/vehículo. Cada
-Transportista se **postula** con una **oferta** (modelo *pull*). El Cliente ve un
+("fleteros") verificados. El Cliente publica una **solicitud** (sin ningún precio) y el
+sistema notifica a Transportistas compatibles por zona/vehículo. Cada Transportista se
+**postula** con una **oferta** (modelo *pull*), cuyo precio calcula el backend con el vehículo
+y los ayudantes reales de ese Transportista. El Cliente ve un
 **top 3 por score** y elige: se confirma un **viaje** que se ejecuta con **PIN de
 inicio y fin + GPS**, se paga con **comisión de plataforma**, y el Cliente deja una
 **reseña**. El **chat** se habilita solo tras confirmar el viaje.
@@ -49,7 +50,7 @@ inicio y fin + GPS**, se paga con **comisión de plataforma**, y el Cliente deja
 
 | Canal | Qué va por acá |
 |-------|----------------|
-| **Backend Go** (`API_BASE_URL`, REST + JWT en todos los endpoints — RNF-01) | Registro (RF-05, RF-16), vehículos (RF-18), publicar solicitud + cotización (RF-06 / RN-01 / RN-02), ver/ofertar (RF-17), elegir oferta / confirmar viaje (RF-07), cancelaciones (RF-08 / RF-19 / RN-07), info e historial de viajes (RF-14, RF-21, RF-24), PIN inicio/fin (RF-22 / RN-06), reseña (RF-12), perfiles (RF-11), incidentes (RF-13, RF-23), notificaciones (RF-09). |
+| **Backend Go** (`API_BASE_URL`, REST + JWT en todos los endpoints — RNF-01) | Registro (RF-05, RF-16), vehículos (RF-18), publicar solicitud (RF-06, sin precio), ver/ofertar con precio y viajes calculados (RF-17 / RN-01 / RN-02), elegir oferta / confirmar viaje (RF-07), cancelaciones (RF-08 / RF-19 / RN-07), info e historial de viajes (RF-14, RF-21, RF-24), PIN inicio/fin (RF-22 / RN-06), reseña (RF-12), perfiles (RF-11), incidentes (RF-13, RF-23), notificaciones (RF-09). |
 | **Supabase directo** (`supabase_flutter`, apoyado en RLS) | **Auth** (GoTrue: login, registro de credenciales, refresh, `auth.uid()` = `usuario.id`). **Realtime:** chat sobre `mensaje` (RF-10 / RF-20 / RI-05), ubicación en vivo sobre `viaje_ubicacion` (RF-15 / RI-04). El Transportista **inserta** sus pings GPS en `viaje_ubicacion`; el Cliente los **lee**. |
 
 > El JWT lo emite Supabase Auth y se manda **tanto** a Supabase como en el header
@@ -64,8 +65,10 @@ inicio y fin + GPS**, se paga con **comisión de plataforma**, y el Cliente deja
 
 ### 3.3 Reglas de negocio que la UI debe respetar (detalle en el backend)
 
-- **RN-01 / RNF-04 — mínima decisión del Cliente:** el precio **no se edita**; se
-  muestra la cotización que devuelve la API. El Cliente nunca tipea un precio.
+- **RN-01 / RNF-04 — mínima decisión del Cliente:** **no hay cotización estimada** al
+  publicar la solicitud (decisión D-13 del backend). El único precio que ve el Cliente es el
+  `precio_calculado` de cada oferta, tal como lo devuelve la API: no se edita ni se recalcula.
+  El Cliente nunca tipea un precio, y nunca se le muestra el desglose de costo de la oferta.
 - **RN-05 — top 3:** por defecto se muestran **3** ofertas ordenadas por score; botón
   "ver más" para pedir el resto. No mostrar todas de una.
 - **RN-06 — flujo de PIN:** el Transportista ve/carga **PIN de inicio** al llegar a
