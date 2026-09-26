@@ -270,8 +270,6 @@ el resto de la app los consume desde ahí o desde el `Theme`.
 - Los íconos de la UI son `Icons` de Material o assets propios, nunca emojis como texto.
 - Para estados y marcas en la documentación se usa texto ("Hecho", "Pendiente", "Atención:").
 - Los caracteres tipográficos que no son emojis (flechas, `·`, `—`) están permitidos.
-- Deuda conocida: la salida de `scripts/pre-commit` todavía tiene un símbolo de este tipo. Se
-  corrige en una tarea aparte.
 
 ---
 

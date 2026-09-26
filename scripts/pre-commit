@@ -15,4 +15,4 @@ dart run custom_lint
 echo "› flutter test"
 flutter test
 
-echo "✓ pre-commit OK"
+echo "pre-commit OK"
