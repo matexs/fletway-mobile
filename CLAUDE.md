@@ -2,7 +2,8 @@
 
 > Contexto persistente del repo de la **app móvil Flutter** de Fletway.
 > Cualquier sesión de Claude Code debe poder arrancar leyendo **solo este archivo**
-> + `docs/ESTADO_PROYECTO.md` + `docs/ARQUITECTURA.md`.
+> + `docs/ESTADO_PROYECTO.md` + `docs/ARQUITECTURA.md`. El orden de construcción (backend y app,
+> módulo a módulo) está en `../fletway-backend/docs/PLAN_CONSTRUCCION.md`.
 
 ---
 
@@ -14,7 +15,7 @@ diferenciadas para Cliente y Transportista** en un mismo binario (RI-02).
 Este repo **consume**; no define negocio. La **fuente de verdad** es el repo
 **`fletway-backend`**:
 
-- Requisitos (ERS): `fletway-backend/docs/ERS_Fletway.pdf`
+- Requisitos (ERS): `fletway-backend/docs/ERS_Fletway.docx`
 - Esquema de datos: `fletway-backend/docs/DOCUMENTACION_BASE_DE_DATOS.md`
 - Contrato de API: `fletway-backend/docs/ENDPOINTS.md` ← lo que consume esta app
 - Reglas de negocio y trazabilidad: `fletway-backend/CLAUDE.md` §3 y `docs/TRAZABILIDAD.md`
@@ -50,7 +51,7 @@ inicio y fin + GPS**, se paga con **comisión de plataforma**, y el Cliente deja
 
 | Canal | Qué va por acá |
 |-------|----------------|
-| **Backend Go** (`API_BASE_URL`, REST + JWT en todos los endpoints — RNF-01) | Registro (RF-05, RF-16), vehículos (RF-18), publicar solicitud (RF-06, sin precio), ver/ofertar con precio y viajes calculados (RF-17 / RN-01 / RN-02), elegir oferta / confirmar viaje (RF-07), cancelaciones (RF-08 / RF-19 / RN-07), info e historial de viajes (RF-14, RF-21, RF-24), PIN inicio/fin (RF-22 / RN-06), reseña (RF-12), perfiles (RF-11), incidentes (RF-13, RF-23), notificaciones (RF-09). |
+| **Backend Go** (`API_BASE_URL`, que ya incluye el prefijo `/api`; REST + JWT en todos los endpoints — RNF-01) | Perfil y rol (`GET /me`), registro (RF-05, RF-16), vehículos (RF-18), publicar solicitud (RF-06, sin precio), ver/ofertar con precio y viajes calculados (RF-17 / RN-01 / RN-02), elegir oferta / confirmar viaje (RF-07), cancelaciones (RF-08 / RF-19 / RN-07), info e historial de viajes (RF-14, RF-21, RF-24), PIN inicio/fin (RF-22 / RN-06), reseña (RF-12), perfiles (RF-11), incidentes (RF-13, RF-23), notificaciones (RF-09). |
 | **Supabase directo** (`supabase_flutter`, apoyado en RLS) | **Auth** (GoTrue: login, registro de credenciales, refresh, `auth.uid()` = `usuario.id`). **Realtime:** chat sobre `mensaje` (RF-10 / RF-20 / RI-05), ubicación en vivo sobre `viaje_ubicacion` (RF-15 / RI-04). El Transportista **inserta** sus pings GPS en `viaje_ubicacion`; el Cliente los **lee**. |
 
 > El JWT lo emite Supabase Auth y se manda **tanto** a Supabase como en el header
@@ -61,7 +62,8 @@ inicio y fin + GPS**, se paga con **comisión de plataforma**, y el Cliente deja
 **Cliente:** RF-05 a RF-15.
 **Transportista:** RF-16 a RF-24.
 **Ambos:** RF-09 (notificaciones), RF-10/RF-20 (chat), historial.
-**Administrador (RF-01 a RF-04):** NO tiene app móvil — es la futura web admin. Ignorar.
+**Administrador (RF-01 a RF-04):** NO tiene app móvil. En esta etapa opera con endpoints del
+backend desde Postman (D-17 del backend). Ignorar.
 
 ### 3.3 Reglas de negocio que la UI debe respetar (detalle en el backend)
 
@@ -69,15 +71,21 @@ inicio y fin + GPS**, se paga con **comisión de plataforma**, y el Cliente deja
   publicar la solicitud (decisión D-13 del backend). El único precio que ve el Cliente es el
   `precio_calculado` de cada oferta, tal como lo devuelve la API: no se edita ni se recalcula.
   El Cliente nunca tipea un precio, y nunca se le muestra el desglose de costo de la oferta.
-- **RN-05 — top 3:** por defecto se muestran **3** ofertas ordenadas por score; botón
-  "ver más" para pedir el resto. No mostrar todas de una.
-- **RN-06 — flujo de PIN:** el Transportista ve/carga **PIN de inicio** al llegar a
-  cargar y **PIN de fin** al terminar; ambos van al backend junto con la ubicación
-  GPS. La pantalla de **reseña** del Cliente se habilita recién cuando el viaje quedó
-  finalizado (PIN de fin validado por el backend).
-- **RN-07 — cancelación:** al cancelar, la UI del Cliente debe advertir si hay **cargo
-  de resarcimiento** (si el Transportista ya salió) vs sin cargo. El backend decide el
-  monto; la app solo informa y confirma.
+- **RN-05 — top 3:** por defecto se muestran **3** ofertas ordenadas por el score que calcula
+  el backend (precio, calificación y tasa de cumplimiento; **sin cercanía**, D-25); botón
+  "ver más" para pedir el resto. No mostrar todas de una. La patente del vehículo se muestra
+  recién después de aceptar.
+- **RN-05 — avisos:** en esta etapa **no hay notificaciones push** (D-17). Los avisos son
+  notificaciones in-app (RF-09) y el Transportista ve el listado de solicitudes compatibles.
+- **RN-06 — flujo de PIN (D-26):** el **Transportista nunca ve el PIN**. El Cliente ve el PIN
+  de inicio y el de fin en su pantalla del viaje y se los dicta al Transportista: el de inicio
+  antes de empezar el servicio y el de fin al terminar. La pantalla del Transportista sólo tiene
+  el campo para cargarlo; el valor viaja al backend con la ubicación GPS. La pantalla de
+  **reseña** del Cliente se habilita cuando el viaje quedó finalizado (PIN de fin validado), y
+  durante 14 días.
+- **RN-07 — cancelación:** el Transportista marca "salí" al salir hacia el origen. Al cancelar,
+  la UI del Cliente advierte si hay **cargo de resarcimiento** (20 % del precio, si el
+  Transportista ya salió) o no. El backend decide el monto; la app sólo informa y confirma.
 - **RI-05 — chat:** la entrada al chat aparece **solo** cuando existe un viaje
   confirmado. Sin viaje, no hay chat.
 - **RF-17 / RN-04:** el Transportista solo ve solicitudes compatibles con su zona y
@@ -206,9 +214,19 @@ el resto de la app los consume desde ahí o desde el `Theme`.
 | Espaciados | `fletway_spacing.dart` | Clase `FletwaySpacing`. Escala base 4: `xs` 4, `sm` 8, `md` 12, `lg` 16, `xl` 24, `xxl` 32, `xxxl` 48. |
 | Radios | `fletway_radius.dart` | Clase `FletwayRadius`: `sm`, `md`, `lg`, `full`. |
 
-- **Paleta, familia tipográfica y valores de radios: a definir** (el diseño detallado de UI está
-  fuera del alcance de la ERS, §1.2). El único valor definido hoy es la semilla `#1B6EF3`, que
-  pasa a ser el color primario.
+- **Valores (provisionales y reemplazables):**
+  - **Paleta (A-2 del plan, 2026-10-01):** el color de marca es un **naranja tostado,
+    amarronado: `#C36224`**, usado como **primario** (botones principales, acentos, estados
+    activos). El resto es discreto: **secundarios en grises** neutros y **fondo blanco**.
+    Implementación: `ColorScheme.fromSeed(seedColor: Color(0xFFC36224))` con una variante que
+    respete el tono de la semilla en el primario (por ejemplo `DynamicSchemeVariant.fidelity`), y
+    `secondary`/`tertiary` sobrescritos con grises neutros y `surface` en blanco para el tema claro.
+    En el tema oscuro, la misma semilla con superficies en gris oscuro. Los valores exactos de
+    los grises se fijan una sola vez en `fletway_colors.dart`. La semilla anterior (`#1B6EF3`, azul)
+    queda descartada.
+  - **Tipografía:** la escala por defecto de Material 3, sin fuente propia.
+  - **Radios:** `sm` 4, `md` 8, `lg` 16, `full` 999.
+  - **Modo oscuro:** sí, con la misma semilla y `Brightness.dark`.
 - `lib/app/theme.dart` es el **único** lugar que traduce los tokens a `ThemeData` (claro y
   oscuro, desde los mismos tokens). Los colores sin equivalente en `ColorScheme` (éxito,
   advertencia) se exponen con un `ThemeExtension`.
@@ -285,7 +303,9 @@ el resto de la app los consume desde ahí o desde el `Theme`.
 
 ## 7. Estado del toolchain
 
-Flutter **3.47.2 / Dart 3.13.2** instalado en `C:\src\flutter`. El proyecto ya
+Flutter **3.47.2 / Dart 3.13.2**. Cada integrante usa su instalación: en Windows
+`C:\src\flutter` y en Linux `~/development/flutter`; las dos son válidas. **Plataforma objetivo
+de esta etapa: sólo Android** (D-17); `ios/` queda generado pero no se mantiene. El proyecto ya
 tiene `android/` + `ios/`, `pub get` corrido, `flutter analyze` sin issues y
 `build_runner` operativo. Versiones clave: **Riverpod 3**, **go_router 18**,
 **freezed 3** (clases `abstract class X with _$X`). El **Android SDK / emulador

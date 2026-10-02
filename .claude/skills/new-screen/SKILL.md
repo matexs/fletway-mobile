@@ -79,7 +79,8 @@ chequeo de rol dentro de la screen. Rutas de chat/tracking van anidadas bajo
 | RF-08 | antes de confirmar cancelación, mostrar si habrá **cargo de resarcimiento** (dato del backend) o no (RN-07). |
 | RF-12 | habilitar el formulario de reseña **solo** si el viaje está finalizado (PIN de fin validado — RN-06). |
 | RF-17 | ocultar/deshabilitar "ofertar" si `user.puedeOfertar == false` (habilitación RF-01). |
-| RF-22 | pedir **PIN de inicio** y luego **PIN de fin**; enviar cada uno con la ubicación GPS (`geolocator`) al backend (RN-06). |
+| RF-22 | pedir **PIN de inicio** y luego **PIN de fin**, que dicta el Cliente; enviar cada uno con la ubicación GPS (`geolocator`) al backend (RN-06). La pantalla del Transportista **nunca** muestra el valor del PIN (D-26). |
+| RF-21 (Cliente) | mostrar el PIN de inicio y el de fin en el viaje del Cliente, para que se los dicte al Transportista (D-26). |
 | RF-10/RF-20 | mostrar el chat solo dentro de un `viaje/:id` confirmado (RI-05). |
 
 ### 6. Test

@@ -1,6 +1,6 @@
 # Arquitectura — fletway-mobile
 
-**Última actualización:** 2026-09-07
+**Última actualización:** 2026-10-01
 
 Patrón de referencia para toda la app. Las skills `new-screen` y `feature-scaffold`
 lo aplican.
@@ -17,6 +17,13 @@ lo aplican.
 | M-04 | HTTP al backend Go con **`dio`** + interceptor que inyecta el JWT | RNF-01: todos los endpoints del backend requieren `Authorization: Bearer`. |
 | M-05 | **`supabase_flutter`** para Auth y Realtime, no para CRUD de negocio | Modelo híbrido (ver `fletway-backend/docs/DECISIONES_TECNICAS.md` D-10). |
 | M-06 | DTOs con **`freezed` + `json_serializable`**, campos espejando la API | Contrato estable; ver skill `sync-api-models`. |
+| M-07 | **Sólo Android** en esta etapa | iOS requiere Mac y APNs (D-17 del backend). `ios/` queda generado sin mantenerse. |
+| M-08 | **Sin notificaciones push** en esta etapa; avisos in-app (`GET /notificaciones`) | D-17/D-22 del backend. Se suman después con FCM (`firebase_messaging`). |
+| M-09 | **Rol y habilitación desde `GET /me`**, nunca desde `user_metadata` | La metadata la puede editar el propio usuario (D-18 del backend). |
+| M-10 | **Dirección, mapa y geocodificación sin API** por ahora: dirección manual + selector de zona; el mapa (`google_maps_flutter`) y la geocodificación se integran después | D-17/D-20 del backend. Los componentes se arman detrás de una interfaz para conectar el proveedor sin rehacer pantallas. |
+| M-11 | Archivos con **`image_picker`** y **`file_picker`** (jpg, png, pdf; hasta 10 MB) | Documentos del Transportista e incidentes (D-19 del backend). |
+| M-12 | **Sólo español (Argentina)**, sin internacionalización; `intl` con locale `es_AR` para moneda y fechas | D-17 del backend. |
+| M-13 | **Sin conexión:** el PIN requiere red (reintento automático con aviso); los pings de GPS se encolan y se reenvían al volver la señal | D-26 del backend. |
 
 ---
 
@@ -53,7 +60,7 @@ Reglas:
 | `config/` | `Env` — carga `.env` (`API_BASE_URL`, `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY` (o `SUPABASE_ANON_KEY`), `APP_ENV`). |
 | `network/` | `ApiClient` (Dio configurado) + `AuthInterceptor` (agrega el JWT de la sesión Supabase a cada request) + `ApiException` (mapea el envelope de error único del backend `{error:{code,message}}`). |
 | `supabase/` | `SupabaseInit` / `supabaseClient` — inicializa `supabase_flutter`; expone helpers de streams para `mensaje` y `viaje_ubicacion`. |
-| `auth/` | `AppUser` (id, email, **rol**: `cliente` \| `transportista`), `AuthRepository` (login, registro, logout, refresh vía GoTrue), `authControllerProvider` (estado de sesión observado por el router). |
+| `auth/` | `AppUser` (id, email, **rol**: `cliente` \| `transportista`, estado de habilitación), `AuthRepository` (login, registro, logout, refresh vía GoTrue), `authControllerProvider` (estado de sesión observado por el router). El rol y la habilitación salen de `GET /me` (M-09). |
 | `error/` | `Failure` + helpers de presentación de errores. |
 
 ---
@@ -87,3 +94,48 @@ Antes de habilitarlos, el backend corre su skill `rls-policy-review` sobre esas 
 - `test/` espeja `lib/`. Unit test de controllers con `mocktail` sobre los repos.
 - Golden/widget test para pantallas clave (top 3 ofertas, flujo de PIN).
 - Sin llamadas de red reales en tests.
+
+---
+
+## 7. Mapa de pantallas por rol
+
+Derivado de los RF y del plan de construcción (`../fletway-backend/docs/PLAN_CONSTRUCCION.md`). La columna "Mód." es el módulo del plan en el que se construye cada pantalla. Rutas bajo `/cliente/...` y `/transportista/...` según M-02.
+
+**Comunes**
+
+| Pantalla | RF | Mód. |
+|---|---|---|
+| Login | — | 2 |
+| Registro de Cliente | RF-05 | 2 |
+| Registro de Transportista (datos personales) | RF-16 | 2 |
+| Notificaciones (in-app) | RF-09 | 13 |
+| Perfil propio | — | 2 |
+
+**Cliente**
+
+| Pantalla | RF | Mód. |
+|---|---|---|
+| Home (mis solicitudes y viajes activos) | — | 6 |
+| Publicar solicitud: zonas, dirección, fecha y franja, acceso (pisos, ascensor, distancia a pie), objetos del catálogo o manuales, ayudantes deseados | RF-06 | 6 |
+| Detalle de solicitud: top 3 de ofertas y "ver más"; cancelar; republicar si venció | RF-06, RF-07 | 6, 9 |
+| Perfil del Transportista (reseñas, calificación, cumplimiento) | RF-11 | 9 |
+| Viaje: PIN de inicio y de fin visibles, seguimiento, chat, cancelar con aviso de cargo | RF-08, RF-10, RF-15 | 10, 11 |
+| Calificar el servicio | RF-12 | 13 |
+| Reportar un problema | RF-13 | 13 |
+| Historial de viajes | RF-14 | 14 |
+
+**Transportista**
+
+| Pantalla | RF | Mód. |
+|---|---|---|
+| Estado de habilitación y carga de documentos | RF-01, RF-16 | 3 |
+| Mis vehículos: alta (elige el tipo, la app propone sus medidas estándar y el Transportista las corrige con las reales; peso) y costos del vehículo (pantalla aparte, con ayuda por campo) | RF-18 | 4 |
+| Mis zonas de trabajo y disponibilidad | RN-04 | 4 |
+| Solicitudes compatibles y detalle | RF-17 | 7 |
+| Armar oferta (vehículo y ayudantes; ver precio y viajes, o el motivo si la carga no entra) | RF-17 | 8 |
+| Mis ofertas (retirar) | RF-17 | 8 |
+| Viaje: "salí", carga de PIN de inicio y de fin, envío de ubicación, chat, cancelar | RF-19, RF-20, RF-21, RF-22 | 10, 11 |
+| Vincular cuenta de Mercado Pago | RI-03 | 12 |
+| Reportar un problema | RF-23 | 13 |
+| Historial de viajes | RF-24 | 14 |
+
