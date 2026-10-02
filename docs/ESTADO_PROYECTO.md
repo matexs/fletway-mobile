@@ -2,7 +2,7 @@
 
 > Foto viva del avance. Actualizar al cerrar cada bloque. Fechas absolutas.
 
-**Última actualización:** 2026-09-26 · **Etapa:** scaffolding — proyecto Flutter compilando + convenciones de código y UI definidas
+**Última actualización:** 2026-10-01 · **Etapa:** definiciones cerradas, listo para construir (ver `../fletway-backend/docs/PLAN_CONSTRUCCION.md`)
 
 ---
 
@@ -30,7 +30,7 @@ solo el router con placeholders.
 | Skills de Claude Code | Hecho | `new-screen`, `sync-api-models`, `feature-scaffold`. |
 | CI + pre-commit | Hecho | `.github/workflows/ci.yml` (pub get → codegen → format → analyze → custom_lint → test); `scripts/pre-commit`. |
 | Convenciones de código y UI | Definidas (2026-09-26) | `CLAUDE.md` §5: formato y análisis estático, modularización `core/` `features/` `shared/`, separación UI/lógica con Riverpod, design system, componentes compartidos, dartdoc y prohibición de emojis. |
-| Design system y componentes compartidos | Pendiente | Reglas definidas en `CLAUDE.md` §5; falta crear `lib/shared/design_system/` y los componentes `Fletway*` en `lib/shared/widgets/`. Paleta, tipografía y radios: a definir (hoy sólo la semilla `#1B6EF3`). |
+| Design system y componentes compartidos | Pendiente | Reglas definidas en `CLAUDE.md` §5; falta crear `lib/shared/design_system/` y los componentes `Fletway*` en `lib/shared/widgets/`. Valores definidos (2026-10-01): primario naranja tostado `#C36224`, secundarios grises y fondo blanco (`ColorScheme.fromSeed`), tipografía Material 3 por defecto, radios 4/8/16/999. |
 | Pantallas de negocio (Cliente / Transportista) | Pendiente | El router tiene solo `_Placeholder`. |
 | Toolchain Android (SDK, emulador) | Pendiente | No instalado. No hace falta para analyze/test/codegen; sí para `flutter run`. |
 
@@ -38,23 +38,23 @@ solo el router con placeholders.
 
 ## Pendientes / próximos pasos (ordenados)
 
-1. Completar `.env` real (`API_BASE_URL`, `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`).
-2. **Auth primero** (RF-05 / RF-16 + login): pantallas en `features/auth/` con la
-   skill `new-screen`; el `authControllerProvider` ya alimenta el guard de rol.
-   Falta traer el perfil del backend (rol + estado de habilitación) — hoy se
-   deriva de `user_metadata` del JWT (ver `TODO` en `auth_controller.dart`).
-3. Con el primer endpoint del backend publicado en
-   `../fletway-backend/docs/ENDPOINTS.md`, correr `sync-api-models`.
-4. Feature por feature siguiendo `docs/API_CONTRATOS.md` y la prioridad del backend.
-5. Crear `lib/shared/design_system/` (tokens) y los primeros componentes `Fletway*` cuando la
-   primera pantalla los necesite, según `CLAUDE.md` §5. Antes hay que definir paleta,
-   tipografía y radios.
-6. Elegir un logger (hoy no hay ninguno; `avoid_print` prohíbe `print`).
-7. Completar el dartdoc del código existente que no lo tiene (por ejemplo `ApiClient`). El
-   análisis no lo verifica; se controla en code review.
-8. Para correr en emulador: instalar Android Studio (`winget install Google.AndroidStudio`),
-   abrirlo una vez (instala Android SDK), `flutter doctor --android-licenses`. Si
-   Gradle se queja del Java 8 del sistema: `flutter config --jdk-dir "<Android Studio>\jbr"`.
+El orden de trabajo lo marca `../fletway-backend/docs/PLAN_CONSTRUCCION.md` (backend y app avanzan
+juntos, módulo a módulo). Lo propio de la app:
+
+1. Completar `.env` real (`API_BASE_URL` con `/api`, `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`)
+   desde el gestor de contraseñas del equipo.
+2. **Módulo 1:** design system (`lib/shared/design_system/`, primario `#C36224`, grises y blanco) y
+   componentes base `Fletway*` en `lib/shared/widgets/`.
+3. **Módulo 2:** login y registro; `auth_controller` pasa a usar `GET /me` para rol y habilitación
+   (resuelve el `TODO` actual).
+4. **Módulos 3 en adelante:** pantallas según el mapa de `docs/ARQUITECTURA.md` §7, con
+   `sync-api-models` a medida que el backend publica cada endpoint.
+5. Paquetes a sumar cuando el módulo los necesite: `image_picker` y `file_picker` (módulo 3),
+   `geolocator` ya está (módulo 10). Mapas y push quedan para después (M-08, M-10).
+6. Elegir un logger.
+7. Completar el dartdoc del código existente (por ejemplo `ApiClient`).
+8. Para correr en emulador: Android Studio (instala el Android SDK) y
+   `flutter doctor --android-licenses`.
 
 ---
 
@@ -77,3 +77,5 @@ solo el router con placeholders.
 | 2026-09-07 | Flutter 3.47.2 instalado (`C:\src\flutter`). `flutter create` (android/ios), `pub get` (deps a Riverpod 3 / go_router 18 / freezed 3), `flutter analyze` sin issues, `build_runner` OK. Añadidos CI + pre-commit. |
 | 2026-09-26 | Contexto alineado con la decisión D-13 del backend: no hay cotización estimada al publicar; el Cliente sólo ve el `precio_calculado` de cada oferta, sin desglose (`CLAUDE.md` §2 y §3, `API_CONTRATOS.md`, skills `new-screen` y `sync-api-models`). Convenciones de código y UI en `CLAUDE.md` §5. Emojis reemplazados por texto en este archivo. PR #1 mergeado; CI de `main` verde. |
 | 2026-09-26 | Emoji quitado de la salida de `scripts/pre-commit`. PR #2 mergeado; CI de `main` verde. No quedan emojis en archivos versionados ni ramas secundarias. |
+| 2026-10-01 | Definiciones para empezar la construcción: sólo Android, sin push en esta etapa, rol desde `GET /me`, dirección y mapa sin API por ahora, archivos con `image_picker`/`file_picker`, es-AR, comportamiento sin conexión (M-07 a M-13 en `ARQUITECTURA.md`), mapa de pantallas por rol (`ARQUITECTURA.md` §7), valores del design system, PIN que sólo ve el Cliente, score sin cercanía y contratos con prefijo `/api` (`API_CONTRATOS.md`). |
+| 2026-10-01 | Color definido: primario naranja tostado `#C36224`, secundarios grises y fondo blanco. El alta de vehículo propone las medidas estándar del tipo elegido (D-32 del backend). |
