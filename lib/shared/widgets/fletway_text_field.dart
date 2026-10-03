@@ -20,8 +20,42 @@ class FletwayTextField extends StatelessWidget {
     this.oculto = false,
     this.habilitado = true,
     this.accionTeclado,
+    this.sufijo,
     super.key,
   });
+
+  /// Campo para números decimales (medidas, montos): teclado numérico y sólo
+  /// dígitos con un separador decimal (coma o punto) y hasta [decimales]
+  /// decimales. Leer el valor con [FletwayTextField.leerDecimal]. [sufijo] es la
+  /// unidad que se muestra a la derecha (`m`, `kg`, `$`).
+  FletwayTextField.decimal({
+    required this.etiqueta,
+    this.controller,
+    this.ayuda,
+    this.validator,
+    this.onChanged,
+    this.accionTeclado,
+    this.sufijo,
+    int decimales = 2,
+    super.key,
+  })  : teclado = TextInputType.numberWithOptions(decimal: decimales > 0),
+        formateadores = [
+          FilteringTextInputFormatter.allow(
+            RegExp(
+              decimales > 0 ? '^\\d*([.,]\\d{0,$decimales})?' : '^\\d*',
+            ),
+          ),
+        ],
+        oculto = false,
+        habilitado = true;
+
+  /// Convierte el texto de un campo [FletwayTextField.decimal] en número. Acepta
+  /// coma o punto decimal. Devuelve null si está vacío o no es un número.
+  static double? leerDecimal(String? texto) {
+    final t = (texto ?? '').trim().replaceAll(',', '.');
+    if (t.isEmpty) return null;
+    return double.tryParse(t);
+  }
 
   /// Etiqueta del campo.
   final String etiqueta;
@@ -53,6 +87,9 @@ class FletwayTextField extends StatelessWidget {
   /// Acción del botón del teclado (siguiente, listo, etc.).
   final TextInputAction? accionTeclado;
 
+  /// Texto fijo a la derecha del valor, por ejemplo la unidad.
+  final String? sufijo;
+
   @override
   Widget build(BuildContext context) => TextFormField(
         controller: controller,
@@ -63,6 +100,11 @@ class FletwayTextField extends StatelessWidget {
         obscureText: oculto,
         enabled: habilitado,
         textInputAction: accionTeclado,
-        decoration: InputDecoration(labelText: etiqueta, helperText: ayuda),
+        decoration: InputDecoration(
+          labelText: etiqueta,
+          helperText: ayuda,
+          helperMaxLines: 3,
+          suffixText: sufijo,
+        ),
       );
 }
