@@ -4,7 +4,8 @@ import 'package:fletway_mobile/core/auth/auth_controller.dart';
 import 'package:fletway_mobile/core/error/failure.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-AuthSessionState autenticado(UserRole rol) => AuthSessionState(
+AuthSessionState autenticado(UserRole rol, {EstadoHabilitacion? estado}) =>
+    AuthSessionState(
       estado: AuthEstado.autenticado,
       user: AppUser(
         id: 'u1',
@@ -12,6 +13,7 @@ AuthSessionState autenticado(UserRole rol) => AuthSessionState(
         nombreCompleto: 'A B',
         telefono: '1144440000',
         role: rol,
+        estadoHabilitacion: estado,
       ),
     );
 
@@ -23,7 +25,18 @@ void main() {
     falla: Failure('x'),
   );
   final cliente = autenticado(UserRole.cliente);
-  final transportista = autenticado(UserRole.transportista);
+  final transportista = autenticado(
+    UserRole.transportista,
+    estado: EstadoHabilitacion.habilitado,
+  );
+  final pendiente = autenticado(
+    UserRole.transportista,
+    estado: EstadoHabilitacion.pendiente,
+  );
+  final rechazado = autenticado(
+    UserRole.transportista,
+    estado: EstadoHabilitacion.rechazado,
+  );
 
   final casos = <(String, AuthSessionState, String, String?)>[
     ('sin sesión puede ver login', sinSesion, '/login', null),
@@ -54,6 +67,25 @@ void main() {
     (
       'transportista navega su área',
       transportista,
+      '/transportista/habilitacion',
+      null
+    ),
+    ('habilitado ve su inicio', transportista, '/transportista', null),
+    (
+      'pendiente va a la documentación',
+      pendiente,
+      '/transportista',
+      '/transportista/habilitacion'
+    ),
+    (
+      'rechazado va a la documentación',
+      rechazado,
+      '/transportista',
+      '/transportista/habilitacion'
+    ),
+    (
+      'pendiente se queda en la documentación',
+      pendiente,
       '/transportista/habilitacion',
       null
     ),

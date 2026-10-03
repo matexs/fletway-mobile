@@ -1,4 +1,5 @@
-import 'package:supabase_flutter/supabase_flutter.dart' show AuthException;
+import 'package:supabase_flutter/supabase_flutter.dart'
+    show AuthException, StorageException;
 
 import '../network/api_exception.dart';
 
@@ -17,6 +18,15 @@ class Failure {
   /// (string estable del backend o de Supabase Auth) permite textos específicos
   /// sin parsear strings.
   factory Failure.from(Object error) {
+    if (error is Failure) return error;
+    if (error is StorageException) {
+      return Failure(
+        error.statusCode == '413'
+            ? 'El archivo es demasiado grande.'
+            : 'No se pudo subir el archivo. Probá de nuevo.',
+        code: 'storage',
+      );
+    }
     if (error is ApiException) {
       return Failure(
         _mensajePorCodigo(error.code) ?? error.message,
@@ -49,6 +59,10 @@ class Failure {
         'transportista_no_habilitado' =>
           'Tu cuenta todavía no está habilitada para ofertar.',
         'pin_invalido' => 'El PIN ingresado no es correcto.',
+        'archivo_no_encontrado' =>
+          'No encontramos el archivo subido. Probá cargarlo de nuevo.',
+        'no_es_transportista' =>
+          'Sólo un Transportista registrado puede cargar documentación.',
         _ => null,
       };
 

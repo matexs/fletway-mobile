@@ -78,6 +78,21 @@ class AppUser {
   /// true si la cuenta es de Transportista.
   bool get esTransportista => role == UserRole.transportista;
 
+  /// Copia del usuario con otro [estado] de habilitación.
+  AppUser conEstadoHabilitacion(EstadoHabilitacion estado) => AppUser(
+        id: id,
+        email: email,
+        nombreCompleto: nombreCompleto,
+        telefono: telefono,
+        role: role,
+        estadoHabilitacion: estado,
+      );
+
+  /// Convierte el código de la API (`pendiente`, `habilitado`, `rechazado`) en
+  /// [EstadoHabilitacion]. Lanza [FormatException] si no lo conoce.
+  static EstadoHabilitacion estadoDesdeCodigo(String codigo) =>
+      _enumPorNombre(EstadoHabilitacion.values, codigo, 'estado_habilitacion');
+
   /// Sólo un Transportista habilitado puede ofertar (RF-01, RF-17).
   bool get puedeOfertar =>
       esTransportista && estadoHabilitacion == EstadoHabilitacion.habilitado;
