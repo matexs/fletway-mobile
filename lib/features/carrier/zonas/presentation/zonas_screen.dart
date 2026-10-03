@@ -4,9 +4,9 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/error/failure.dart';
 import '../../../../shared/design_system/design_system.dart';
+import '../../../../shared/models/zona.dart';
 import '../../../../shared/widgets/widgets.dart';
 import '../application/zonas_controller.dart';
-import '../data/zonas_repository.dart';
 
 /// Elección de las zonas de trabajo del Transportista, agrupadas por provincia
 /// (RN-04). Sólo ve solicitudes con origen o destino en estas zonas.

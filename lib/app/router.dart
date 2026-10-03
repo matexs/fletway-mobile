@@ -13,7 +13,7 @@ import '../features/carrier/vehiculo/presentation/alta_vehiculo_screen.dart';
 import '../features/carrier/vehiculo/presentation/costos_vehiculo_screen.dart';
 import '../features/carrier/vehiculo/presentation/vehiculos_screen.dart';
 import '../features/carrier/zonas/presentation/zonas_screen.dart';
-import '../features/client/catalogo/presentation/selector_objeto_sheet.dart';
+import '../features/client/solicitudes/presentation/selector_objeto_sheet.dart';
 
 /// Rutas de la app. Cliente y Transportista tienen árboles separados
 /// (`/cliente/...` y `/transportista/...`); el `redirect` central

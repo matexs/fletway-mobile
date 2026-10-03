@@ -1,9 +1,9 @@
 import 'package:fletway_mobile/app/theme.dart';
-import 'package:fletway_mobile/features/client/catalogo/application/catalogo_provider.dart';
-import 'package:fletway_mobile/features/client/catalogo/data/catalogo_repository.dart';
-import 'package:fletway_mobile/features/client/catalogo/data/objeto_dto.dart';
-import 'package:fletway_mobile/features/client/catalogo/presentation/selector_objeto_sheet.dart';
-import 'package:fletway_mobile/features/client/catalogo/presentation/widgets/icono_objeto.dart';
+import 'package:fletway_mobile/features/client/solicitudes/application/catalogo_provider.dart';
+import 'package:fletway_mobile/features/client/solicitudes/data/catalogo_repository.dart';
+import 'package:fletway_mobile/features/client/solicitudes/data/objeto_dto.dart';
+import 'package:fletway_mobile/features/client/solicitudes/presentation/selector_objeto_sheet.dart';
+import 'package:fletway_mobile/features/client/solicitudes/presentation/widgets/icono_objeto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
