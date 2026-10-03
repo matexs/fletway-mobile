@@ -5,6 +5,7 @@ import 'package:fletway_mobile/core/auth/perfil_repository.dart';
 import 'package:fletway_mobile/features/carrier/habilitacion/data/habilitacion_dto.dart';
 import 'package:fletway_mobile/features/carrier/habilitacion/data/habilitacion_repository.dart';
 import 'package:fletway_mobile/features/carrier/habilitacion/presentation/habilitacion_screen.dart';
+import 'package:fletway_mobile/features/carrier/inicio/presentation/inicio_transportista_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -64,21 +65,21 @@ void main() {
     final manejado = await tester.binding.handlePopRoute();
     await tester.pumpAndSettle();
     expect(manejado, isFalse);
-    expect(find.text('Home Transportista'), findsNothing);
+    expect(find.byType(InicioTransportistaScreen), findsNothing);
   });
 
   testWidgets('el habilitado abre la documentación y vuelve a su inicio', (
     tester,
   ) async {
     await montar(tester, 'habilitado');
-    expect(find.text('Home Transportista'), findsOneWidget);
+    expect(find.byType(InicioTransportistaScreen), findsOneWidget);
 
-    await tester.tap(find.byTooltip('Mi documentación'));
+    await tester.tap(find.text('Mi documentación'));
     await tester.pumpAndSettle();
     expect(find.byType(HabilitacionScreen), findsOneWidget);
 
     await tester.tap(find.byType(BackButton));
     await tester.pumpAndSettle();
-    expect(find.text('Home Transportista'), findsOneWidget);
+    expect(find.byType(InicioTransportistaScreen), findsOneWidget);
   });
 }

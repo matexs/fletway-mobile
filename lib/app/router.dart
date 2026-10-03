@@ -8,6 +8,11 @@ import '../features/auth/presentation/inicio_screen.dart';
 import '../features/auth/presentation/login_screen.dart';
 import '../features/auth/presentation/registro_screen.dart';
 import '../features/carrier/habilitacion/presentation/habilitacion_screen.dart';
+import '../features/carrier/inicio/presentation/inicio_transportista_screen.dart';
+import '../features/carrier/vehiculo/presentation/alta_vehiculo_screen.dart';
+import '../features/carrier/vehiculo/presentation/costos_vehiculo_screen.dart';
+import '../features/carrier/vehiculo/presentation/vehiculos_screen.dart';
+import '../features/carrier/zonas/presentation/zonas_screen.dart';
 
 /// Rutas de la app. Cliente y Transportista tienen árboles separados
 /// (`/cliente/...` y `/transportista/...`); el `redirect` central
@@ -72,12 +77,25 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/transportista',
-        builder: (_, __) => const _Placeholder(
-          'Home Transportista',
-          conCerrarSesion: true,
-          rutaDocumentacion: '/transportista/habilitacion',
-        ),
+        builder: (_, __) => const InicioTransportistaScreen(),
         routes: [
+          GoRoute(
+            path: 'vehiculos',
+            builder: (_, __) => const VehiculosScreen(),
+            routes: [
+              GoRoute(
+                path: 'nuevo',
+                builder: (_, __) => const AltaVehiculoScreen(),
+              ),
+              GoRoute(
+                path: ':id/costos',
+                builder: (_, state) => CostosVehiculoScreen(
+                  vehiculoId: state.pathParameters['id']!,
+                ),
+              ),
+            ],
+          ),
+          GoRoute(path: 'zonas', builder: (_, __) => const ZonasScreen()),
           GoRoute(
             path: 'solicitudes',
             builder: (_, __) =>
@@ -130,28 +148,15 @@ String? resolverRedireccion(AuthSessionState auth, String ubicacion) {
 /// Placeholder mientras no existan las pantallas reales. Reemplazar con la skill
 /// `new-screen`.
 class _Placeholder extends ConsumerWidget {
-  const _Placeholder(
-    this.label, {
-    this.conCerrarSesion = false,
-    this.rutaDocumentacion,
-  });
+  const _Placeholder(this.label, {this.conCerrarSesion = false});
   final String label;
   final bool conCerrarSesion;
-  // Acceso a la documentación desde el inicio del Transportista habilitado
-  // (renovaciones, D-33).
-  final String? rutaDocumentacion;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) => Scaffold(
         appBar: AppBar(
           title: Text(label),
           actions: [
-            if (rutaDocumentacion != null)
-              IconButton(
-                tooltip: 'Mi documentación',
-                icon: const Icon(Icons.badge_outlined),
-                onPressed: () => context.push(rutaDocumentacion!),
-              ),
             if (conCerrarSesion)
               IconButton(
                 tooltip: 'Cerrar sesión',
