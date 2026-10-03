@@ -10,6 +10,7 @@ import 'package:fletway_mobile/features/client/solicitudes/presentation/detalle_
 import 'package:fletway_mobile/features/client/solicitudes/presentation/mis_solicitudes_screen.dart';
 import 'package:fletway_mobile/features/client/solicitudes/presentation/publicar_solicitud_screen.dart';
 import 'package:fletway_mobile/shared/extensions/fechas.dart';
+import 'package:fletway_mobile/shared/models/solicitud.dart';
 import 'package:fletway_mobile/shared/models/zona.dart';
 import 'package:fletway_mobile/shared/widgets/widgets.dart';
 import 'package:flutter/material.dart';

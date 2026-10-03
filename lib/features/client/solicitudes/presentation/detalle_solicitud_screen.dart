@@ -6,11 +6,10 @@ import '../../../../core/error/failure.dart';
 import '../../../../shared/design_system/design_system.dart';
 import '../../../../shared/extensions/fechas.dart';
 import '../../../../shared/extensions/numeros.dart';
+import '../../../../shared/models/solicitud.dart';
 import '../../../../shared/widgets/widgets.dart';
 import '../application/solicitudes_controller.dart';
-import '../data/solicitud_dto.dart';
 import 'widgets/estado_solicitud.dart';
-import 'widgets/icono_objeto.dart';
 
 /// Detalle de una solicitud del Cliente, con las acciones según su estado:
 /// cancelar si está publicada y republicar si venció (D-20). Las ofertas se

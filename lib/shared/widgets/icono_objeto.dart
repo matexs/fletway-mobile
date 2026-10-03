@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../application/catalogo_provider.dart';
-
 /// Reglas palabra clave → ícono, en orden: la primera que aparece en el nombre
 /// gana, así que las más específicas van antes ("mesa de luz" antes que "mesa").
 const _reglas = <(String, IconData)>[
@@ -37,6 +35,19 @@ const _reglas = <(String, IconData)>[
   ('sofa', Icons.weekend),
   ('tv', Icons.tv),
 ];
+
+const _conTilde = 'áéíóúüñÁÉÍÓÚÜÑ';
+const _sinTilde = 'aeiouunAEIOUUN';
+
+/// Pasa [s] a minúsculas y le quita las tildes, para comparar textos.
+String normalizarTexto(String s) {
+  final b = StringBuffer();
+  for (final c in s.split('')) {
+    final i = _conTilde.indexOf(c);
+    b.write(i < 0 ? c : _sinTilde[i]);
+  }
+  return b.toString().toLowerCase();
+}
 
 /// Ícono de un objeto del catálogo según su nombre (sin mayúsculas ni tildes).
 /// Los objetos que no coinciden con ninguna regla, incluidos los que agregue un

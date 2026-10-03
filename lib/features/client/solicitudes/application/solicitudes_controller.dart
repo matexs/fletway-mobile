@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/error/failure.dart';
+import '../../../../shared/models/solicitud.dart';
 import '../../../../shared/models/zona.dart';
 import '../data/solicitud_dto.dart';
 import '../data/solicitudes_repository.dart';

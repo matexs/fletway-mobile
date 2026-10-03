@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../shared/widgets/icono_objeto.dart';
 import '../data/catalogo_repository.dart';
 import '../data/objeto_dto.dart';
 
@@ -21,17 +22,4 @@ List<ObjetoCatalogo> filtrarObjetos(
     for (final o in objetos)
       if (normalizarTexto(o.nombre).contains(buscado)) o,
   ];
-}
-
-const _conTilde = 'áéíóúüñÁÉÍÓÚÜÑ';
-const _sinTilde = 'aeiouunAEIOUUN';
-
-/// Pasa [s] a minúsculas y le quita las tildes, para comparar textos.
-String normalizarTexto(String s) {
-  final b = StringBuffer();
-  for (final c in s.split('')) {
-    final i = _conTilde.indexOf(c);
-    b.write(i < 0 ? c : _sinTilde[i]);
-  }
-  return b.toString().toLowerCase();
 }

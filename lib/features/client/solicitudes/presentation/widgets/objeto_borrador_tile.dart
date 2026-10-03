@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../shared/extensions/numeros.dart';
+import '../../../../../shared/widgets/icono_objeto.dart';
 import '../../application/borrador_solicitud.dart';
-import 'icono_objeto.dart';
 
 /// Un objeto agregado al formulario, con su cantidad editable y la opción de
 /// quitarlo.

@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/network/api_client.dart';
+import '../../../../shared/models/solicitud.dart';
 import '../../../../shared/models/zona.dart';
 import 'solicitud_dto.dart';
 

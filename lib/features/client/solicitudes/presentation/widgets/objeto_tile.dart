@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../shared/extensions/numeros.dart';
+import '../../../../../shared/widgets/icono_objeto.dart';
 import '../../data/objeto_dto.dart';
-import 'icono_objeto.dart';
 
 /// Un objeto del catálogo con sus medidas, peso y restricciones de carga.
 class ObjetoTile extends StatelessWidget {
