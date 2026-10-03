@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' as sb;
 
+import '../../shared/models/me.dart';
 import '../error/failure.dart';
 import '../network/api_exception.dart';
 import 'app_user.dart';
@@ -138,6 +139,17 @@ class AuthController extends Notifier<AuthSessionState> {
     state = AuthSessionState(
       estado: AuthEstado.autenticado,
       user: user.conEstadoHabilitacion(estado),
+    );
+  }
+
+  /// Reemplaza el perfil del usuario logueado con [me], recién devuelto por el
+  /// backend (por ejemplo, al cambiar la disponibilidad). No hace nada si no hay
+  /// sesión autenticada o si [me] es de otro usuario.
+  void aplicarPerfil(Me me) {
+    if (!state.isAuthenticated || state.user!.id != me.usuarioId) return;
+    state = AuthSessionState(
+      estado: AuthEstado.autenticado,
+      user: AppUser.fromMe(me),
     );
   }
 

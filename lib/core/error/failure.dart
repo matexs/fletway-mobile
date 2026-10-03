@@ -28,6 +28,13 @@ class Failure {
       );
     }
     if (error is ApiException) {
+      if (error.code == 'datos_invalidos' && error.details.isNotEmpty) {
+        // El backend manda el problema de cada campo; se muestran todos juntos.
+        final detalle = error.details.entries
+            .map((e) => '${e.key.replaceAll('_', ' ')}: ${e.value}')
+            .join('\n');
+        return Failure('Revisá los datos.\n$detalle', code: error.code);
+      }
       return Failure(
         _mensajePorCodigo(error.code) ?? error.message,
         code: error.code,
@@ -61,6 +68,10 @@ class Failure {
         'pin_invalido' => 'El PIN ingresado no es correcto.',
         'archivo_no_encontrado' =>
           'No encontramos el archivo subido. Probá cargarlo de nuevo.',
+        'patente_duplicada' => 'Ya hay un vehículo registrado con esa patente.',
+        'tipo_vehiculo_invalido' => 'Elegí un tipo de vehículo de la lista.',
+        'vehiculo_no_encontrado' => 'No encontramos ese vehículo.',
+        'zona_invalida' => 'Alguna de las zonas elegidas ya no existe.',
         'no_es_transportista' =>
           'Sólo un Transportista registrado puede cargar documentación.',
         _ => null,

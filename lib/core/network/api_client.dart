@@ -35,6 +35,9 @@ class ApiClient {
   Future<T> post<T>(String path, {Object? body}) =>
       _run(() => _dio.post<T>(path, data: body));
 
+  Future<T> put<T>(String path, {Object? body}) =>
+      _run(() => _dio.put<T>(path, data: body));
+
   Future<T> patch<T>(String path, {Object? body}) =>
       _run(() => _dio.patch<T>(path, data: body));
 
