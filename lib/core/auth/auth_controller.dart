@@ -127,6 +127,20 @@ class AuthController extends Notifier<AuthSessionState> {
     }
   }
 
+  /// Actualiza el estado de habilitación del Transportista logueado con un valor
+  /// recién leído del backend (por ejemplo, desde la pantalla de documentación),
+  /// sin volver a pedir todo el perfil. No hace nada si no hay un Transportista
+  /// autenticado.
+  void actualizarEstadoHabilitacion(EstadoHabilitacion estado) {
+    final user = state.user;
+    if (!state.isAuthenticated || !user!.esTransportista) return;
+    if (user.estadoHabilitacion == estado) return;
+    state = AuthSessionState(
+      estado: AuthEstado.autenticado,
+      user: user.conEstadoHabilitacion(estado),
+    );
+  }
+
   /// Cierra la sesión en Supabase; el estado pasa a no autenticado con el evento.
   Future<void> signOut() => ref.read(authRepositoryProvider).signOut();
 
