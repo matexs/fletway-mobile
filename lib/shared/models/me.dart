@@ -25,6 +25,10 @@ abstract class Me with _$Me {
     /// Estado del Transportista (`pendiente`, `habilitado`, `rechazado`); null
     /// para los otros roles.
     @JsonKey(name: 'estado_habilitacion') String? estadoHabilitacion,
+
+    /// Interruptor "estoy tomando trabajos" del Transportista (D-21); null para
+    /// los otros roles.
+    bool? disponible,
   }) = _Me;
 
   /// Construye el perfil desde el JSON de la API.

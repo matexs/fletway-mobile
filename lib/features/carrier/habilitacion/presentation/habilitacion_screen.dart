@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../core/auth/auth_controller.dart';
 import '../../../../core/error/failure.dart';
@@ -82,6 +83,31 @@ class _HabilitacionScreenState extends ConsumerState<HabilitacionScreen> {
                   cargando: _tipoEnCurso == tipo.tipoDocumentoCodigo,
                   onCargar:
                       cargando ? null : () => _cargar(tipo.tipoDocumentoCodigo),
+                ),
+              ],
+              // Para ofertar también hacen falta un vehículo con costos y zonas;
+              // se pueden cargar mientras se revisa la documentación.
+              if (mi.estadoHabilitacion != 'habilitado') ...[
+                const SizedBox(height: FletwaySpacing.xl),
+                Text(
+                  'Mientras tanto, cargá tus vehículos y tus zonas de trabajo.',
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                const SizedBox(height: FletwaySpacing.md),
+                FletwayButton(
+                  texto: 'Mis vehículos',
+                  icono: Icons.local_shipping_outlined,
+                  variante: FletwayButtonVariante.secundario,
+                  anchoCompleto: true,
+                  onPressed: () => context.push('/transportista/vehiculos'),
+                ),
+                const SizedBox(height: FletwaySpacing.sm),
+                FletwayButton(
+                  texto: 'Zonas de trabajo',
+                  icono: Icons.map_outlined,
+                  variante: FletwayButtonVariante.secundario,
+                  anchoCompleto: true,
+                  onPressed: () => context.push('/transportista/zonas'),
                 ),
               ],
             ],

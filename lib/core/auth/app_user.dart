@@ -35,6 +35,7 @@ class AppUser {
     required this.telefono,
     required this.role,
     this.estadoHabilitacion,
+    this.disponible,
   });
 
   /// Construye el usuario desde el perfil de la API. Lanza [FormatException] si
@@ -52,6 +53,7 @@ class AppUser {
                 me.estadoHabilitacion!,
                 'estado_habilitacion',
               ),
+        disponible: me.disponible,
       );
 
   /// `usuario.id` == `auth.uid()`.
@@ -72,6 +74,9 @@ class AppUser {
   /// Sólo para Transportistas; null para los otros roles.
   final EstadoHabilitacion? estadoHabilitacion;
 
+  /// Si el Transportista está tomando trabajos (D-21); null para otros roles.
+  final bool? disponible;
+
   /// true si la cuenta es de Cliente.
   bool get esCliente => role == UserRole.cliente;
 
@@ -86,6 +91,7 @@ class AppUser {
         telefono: telefono,
         role: role,
         estadoHabilitacion: estado,
+        disponible: disponible,
       );
 
   /// Convierte el código de la API (`pendiente`, `habilitado`, `rechazado`) en

@@ -258,10 +258,12 @@ el resto de la app los consume desde ahí o desde el `Theme`.
   tarjeta de oferta es un `FletwayCard` con contenido); no redefinen estilos.
 - Los componentes compartidos consumen sólo tokens y tema, no dependen de Riverpod ni de ninguna
   feature: reciben datos y callbacks por parámetro.
-- Estado actual: implementados `FletwayButton`, `FletwayTextField`, `FletwayCard`,
-  `FletwayLoading`, `FletwayErrorView` y `FletwayEmptyView` (importar `widgets.dart`). Se agregan
-  cuando la primera pantalla los necesite: `FletwayConfirmDialog` y las variantes numérica y de
-  selector del campo de texto.
+- Estado actual: implementados `FletwayButton`, `FletwayTextField` (con la variante
+  `FletwayTextField.decimal` para medidas y montos: coma o punto, unidad como sufijo y
+  `FletwayTextField.leerDecimal` para leerlo), `FletwaySelector`, `FletwayCard`, `FletwayLoading`,
+  `FletwayErrorView` y `FletwayEmptyView` (importar `widgets.dart`). Se agrega cuando la primera
+  pantalla lo necesite: `FletwayConfirmDialog`. Los números se muestran en es-AR con la extensión
+  de `lib/shared/extensions/numeros.dart`.
 
 ### Documentación dartdoc
 

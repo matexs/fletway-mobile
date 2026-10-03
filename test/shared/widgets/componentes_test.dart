@@ -149,4 +149,43 @@ void main() {
       expect(find.text('Publicar'), findsOneWidget);
     });
   });
+
+  group('FletwayTextField.decimal', () {
+    testWidgets('sólo deja números con hasta 2 decimales', (tester) async {
+      final c = TextEditingController();
+      await tester.pumpWidget(
+        _envolver(FletwayTextField.decimal(etiqueta: 'Largo', controller: c)),
+      );
+      await tester.enterText(find.byType(TextFormField), '2,456abc');
+      expect(c.text, '2,45');
+      expect(FletwayTextField.leerDecimal(c.text), 2.45);
+    });
+
+    test('leerDecimal acepta coma o punto', () {
+      expect(FletwayTextField.leerDecimal('1350,5'), 1350.5);
+      expect(FletwayTextField.leerDecimal('1350.5'), 1350.5);
+      expect(FletwayTextField.leerDecimal(' '), isNull);
+    });
+  });
+
+  testWidgets('FletwaySelector avisa la opción elegida', (tester) async {
+    String? elegido;
+    await tester.pumpWidget(
+      _envolver(
+        FletwaySelector<String>(
+          etiqueta: 'Tipo',
+          opciones: const [
+            FletwayOpcion(valor: 'a', texto: 'Utilitario'),
+            FletwayOpcion(valor: 'b', texto: 'Camión chico'),
+          ],
+          onChanged: (v) => elegido = v,
+        ),
+      ),
+    );
+    await tester.tap(find.text('Tipo'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Camión chico').last);
+    await tester.pumpAndSettle();
+    expect(elegido, 'b');
+  });
 }
