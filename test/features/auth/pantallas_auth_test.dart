@@ -6,6 +6,7 @@ import 'package:fletway_mobile/features/auth/presentation/registro_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' show AuthException;
 
@@ -135,6 +136,71 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('Ya existe una cuenta con ese email.'), findsOneWidget);
+    });
+  });
+
+  group('Navegación y validación', () {
+    Future<void> montarConRouter(WidgetTester tester) async {
+      tester.view.physicalSize = const Size(1080, 2400);
+      addTearDown(tester.view.reset);
+      final router = GoRouter(
+        initialLocation: '/login',
+        routes: [
+          GoRoute(path: '/login', builder: (_, __) => const LoginScreen()),
+          GoRoute(
+            path: '/registro/cliente',
+            builder: (_, __) => const RegistroScreen(rol: UserRole.cliente),
+          ),
+        ],
+      );
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [authRepositoryProvider.overrideWithValue(repo)],
+          child: MaterialApp.router(
+            theme: FletwayTheme.light,
+            routerConfig: router,
+          ),
+        ),
+      );
+    }
+
+    testWidgets('el atrás desde el registro vuelve al login', (tester) async {
+      await montarConRouter(tester);
+      await tester.tap(find.text('Crear cuenta de Cliente'));
+      await tester.pumpAndSettle();
+      expect(find.byType(RegistroScreen), findsOneWidget);
+
+      // Equivale al botón atrás de Android: antes cerraba la app.
+      final volvio = await tester.binding.handlePopRoute();
+      await tester.pumpAndSettle();
+
+      expect(volvio, isTrue);
+      expect(find.byType(LoginScreen), findsOneWidget);
+    });
+
+    testWidgets('"Ya tengo cuenta" vuelve al login', (tester) async {
+      await montarConRouter(tester);
+      await tester.tap(find.text('Crear cuenta de Cliente'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Ya tengo cuenta'));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(LoginScreen), findsOneWidget);
+    });
+
+    testWidgets('el error se va al corregir el campo', (tester) async {
+      await montar(tester, const LoginScreen());
+      await tester.tap(find.text('Ingresar'));
+      await tester.pump();
+      expect(find.text('Ingresá tu email.'), findsOneWidget);
+
+      await tester.enterText(
+        find.byType(TextFormField).at(0),
+        'ana@ejemplo.com',
+      );
+      await tester.pump();
+
+      expect(find.text('Ingresá tu email.'), findsNothing);
     });
   });
 }

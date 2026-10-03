@@ -35,6 +35,9 @@ class _RegistroScreenState extends ConsumerState<RegistroScreen> {
   final _contrasena = TextEditingController();
   final _confirmacion = TextEditingController();
 
+  // Ver LoginScreen: revalidar al editar recién después del primer envío.
+  var _enviado = false;
+
   bool get _esTransportista => widget.rol == UserRole.transportista;
 
   @override
@@ -46,6 +49,7 @@ class _RegistroScreenState extends ConsumerState<RegistroScreen> {
   }
 
   void _registrar() {
+    setState(() => _enviado = true);
     if (!_form.currentState!.validate()) return;
     ref.read(registroControllerProvider.notifier).registrar(
           rol: widget.rol,
@@ -73,6 +77,9 @@ class _RegistroScreenState extends ConsumerState<RegistroScreen> {
           padding: const EdgeInsets.all(FletwaySpacing.xl),
           child: Form(
             key: _form,
+            autovalidateMode: _enviado
+                ? AutovalidateMode.onUserInteraction
+                : AutovalidateMode.disabled,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -149,7 +156,10 @@ class _RegistroScreenState extends ConsumerState<RegistroScreen> {
                 FletwayButton(
                   texto: 'Ya tengo cuenta',
                   variante: FletwayButtonVariante.texto,
-                  onPressed: () => context.go('/login'),
+                  // Se llega desde el login con push: volver es un pop. Si se
+                  // entró directo a la ruta, no hay a dónde volver.
+                  onPressed: () =>
+                      context.canPop() ? context.pop() : context.go('/login'),
                   anchoCompleto: true,
                 ),
               ],

@@ -39,8 +39,11 @@ class Failure {
         'no_autenticado' ||
         'token_invalido' =>
           'Tu sesión expiró. Iniciá sesión otra vez.',
+        // No se sugiere registrarse de nuevo: el email ya existe en Supabase
+        // Auth y el alta fallaría con user_already_exists.
         'usuario_no_encontrado' =>
-          'No encontramos el perfil de tu cuenta. Creá la cuenta de nuevo.',
+          'No encontramos el perfil de tu cuenta. Cerrá sesión y escribinos '
+              'para revisarla.',
         'rol_no_corresponde' => 'Tu cuenta tiene otro rol.',
         'cuenta_inactiva' => 'Tu cuenta está desactivada.',
         'transportista_no_habilitado' =>

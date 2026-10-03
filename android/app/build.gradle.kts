@@ -6,7 +6,9 @@ plugins {
 
 android {
     namespace = "com.fletway.fletway_mobile"
-    compileSdk = flutter.compileSdkVersion
+    // flutter_secure_storage 11 compila contra el SDK 37 y Flutter trae 36 por
+    // defecto: sin esto el build de Android falla.
+    compileSdk = 37
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
