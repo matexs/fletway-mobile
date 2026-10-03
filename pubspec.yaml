@@ -13,6 +13,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  # es-AR en los componentes de Material (selector de fecha y hora, textos).
+  flutter_localizations:
+    sdk: flutter
 
   # --- Estado / navegación (D-Flutter: Riverpod + go_router) ---
   flutter_riverpod: ^3.1.0

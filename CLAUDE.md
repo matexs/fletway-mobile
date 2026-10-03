@@ -260,10 +260,25 @@ el resto de la app los consume desde ahí o desde el `Theme`.
   feature: reciben datos y callbacks por parámetro.
 - Estado actual: implementados `FletwayButton`, `FletwayTextField` (con la variante
   `FletwayTextField.decimal` para medidas y montos: coma o punto, unidad como sufijo y
-  `FletwayTextField.leerDecimal` para leerlo), `FletwaySelector`, `FletwayCard`, `FletwayLoading`,
-  `FletwayErrorView` y `FletwayEmptyView` (importar `widgets.dart`). Se agrega cuando la primera
-  pantalla lo necesite: `FletwayConfirmDialog`. Los números se muestran en es-AR con la extensión
-  de `lib/shared/extensions/numeros.dart`.
+  `FletwayTextField.leerDecimal` para leerlo), `FletwaySelector`, `FletwaySeccion` (encabezado
+  con ícono), `FletwayCard`, `FletwayLoading`, `FletwayErrorView`, `FletwayEmptyView` y
+  `FletwayConfirmDialog` (usarlo con `confirmarFletway`) (importar `widgets.dart`). Los números y
+  las fechas se muestran en es-AR con las extensiones de `lib/shared/extensions/` (`numeros.dart`,
+  `fechas.dart`); la app usa `flutter_localizations` con `es_AR` (selector de fecha y hora).
+
+### Decoración mínima de cada pantalla
+
+Hasta la pasada de UI/UX del módulo 15 (`../fletway-backend/docs/PLAN_CONSTRUCCION.md`), toda
+pantalla nueva cumple esto, que cuesta poco y evita que la deuda visual crezca:
+
+- **Íconos:** cada ítem de lista lleva un ícono de Material a la izquierda (`leading`), y cada
+  encabezado de sección o acceso, su ícono. Nunca emojis.
+- **Estados vacíos y de error:** siempre con ícono y, si existe, una acción para salir del
+  estado (`FletwayEmptyView(accion: ...)`, `FletwayErrorView(onReintentar: ...)`).
+- **Jerarquía:** título del ítem con `titleMedium`, el dato principal destacado (precio, estado,
+  fecha) y el detalle secundario con `bodySmall`. Los estados se marcan con color de
+  `FletwayEstados` o del `ColorScheme`, además del texto.
+- **Objetos del catálogo:** se muestran con `iconoDeObjeto` (catálogo de objetos).
 
 ### Documentación dartdoc
 

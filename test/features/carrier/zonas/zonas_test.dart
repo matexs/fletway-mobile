@@ -1,6 +1,7 @@
 import 'package:fletway_mobile/app/theme.dart';
 import 'package:fletway_mobile/features/carrier/zonas/data/zonas_repository.dart';
 import 'package:fletway_mobile/features/carrier/zonas/presentation/zonas_screen.dart';
+import 'package:fletway_mobile/shared/models/zona.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';

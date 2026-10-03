@@ -1,8 +1,9 @@
 import 'package:fletway_mobile/app/theme.dart';
-import 'package:fletway_mobile/features/client/catalogo/application/catalogo_provider.dart';
-import 'package:fletway_mobile/features/client/catalogo/data/catalogo_repository.dart';
-import 'package:fletway_mobile/features/client/catalogo/data/objeto_dto.dart';
-import 'package:fletway_mobile/features/client/catalogo/presentation/selector_objeto_sheet.dart';
+import 'package:fletway_mobile/features/client/solicitudes/application/catalogo_provider.dart';
+import 'package:fletway_mobile/features/client/solicitudes/data/catalogo_repository.dart';
+import 'package:fletway_mobile/features/client/solicitudes/data/objeto_dto.dart';
+import 'package:fletway_mobile/features/client/solicitudes/presentation/selector_objeto_sheet.dart';
+import 'package:fletway_mobile/features/client/solicitudes/presentation/widgets/icono_objeto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -93,5 +94,58 @@ void main() {
     await tester.tap(find.text('Sofá 2 cuerpos'));
     await tester.pumpAndSettle();
     expect(elegido?.nombre, 'Sofá 2 cuerpos');
+  });
+
+  group('iconoDeObjeto', () {
+    for (final (nombre, icono) in [
+      ('Mesa de luz', Icons.nightlight),
+      ('Mesa de comedor', Icons.table_restaurant),
+      ('Cama 1 plaza (colchón + base)', Icons.single_bed),
+      ('Cama matrimonial (colchón + base)', Icons.king_bed),
+      ('Sofá 3 cuerpos', Icons.weekend),
+      ('Sillón individual', Icons.chair),
+      ('Cómoda / cajonera', Icons.door_sliding),
+      ('TV (hasta 55", embalada)', Icons.tv),
+      ('Piano de cola', Icons.category_outlined),
+    ]) {
+      test(nombre, () => expect(iconoDeObjeto(nombre), icono));
+    }
+  });
+
+  test('los 28 objetos del catálogo semilla tienen ícono propio', () {
+    // Nombres de la migración 0009 del backend.
+    const nombres = [
+      'Aire acondicionado split (embalado)',
+      'Biblioteca / estantería',
+      'Bicicleta',
+      'Bulto de ropa / valija',
+      'Caja mudanza chica',
+      'Caja mudanza estándar',
+      'Caja mudanza grande',
+      'Cama 1 plaza (colchón + base)',
+      'Cama 2 plazas (colchón + base)',
+      'Cama matrimonial (colchón + base)',
+      'Cómoda / cajonera',
+      'Escritorio',
+      'Espejo / cuadro grande',
+      'Estufa / calefactor portátil',
+      'Heladera',
+      'Horno eléctrico / anafe',
+      'Lavarropas',
+      'Lavavajillas',
+      'Mesa de comedor',
+      'Mesa de luz',
+      'Mesa ratona',
+      'Microondas',
+      'Ropero / placard 2 cuerpos',
+      'Silla (comedor)',
+      'Sillón individual',
+      'Sofá 2 cuerpos',
+      'Sofá 3 cuerpos',
+      'TV (hasta 55", embalada)'
+    ];
+    for (final n in nombres) {
+      expect(iconoDeObjeto(n), isNot(Icons.category_outlined), reason: n);
+    }
   });
 }

@@ -15,18 +15,19 @@ List<ObjetoCatalogo> filtrarObjetos(
   List<ObjetoCatalogo> objetos,
   String texto,
 ) {
-  final buscado = _normalizar(texto.trim());
+  final buscado = normalizarTexto(texto.trim());
   if (buscado.isEmpty) return objetos;
   return [
     for (final o in objetos)
-      if (_normalizar(o.nombre).contains(buscado)) o,
+      if (normalizarTexto(o.nombre).contains(buscado)) o,
   ];
 }
 
 const _conTilde = 'áéíóúüñÁÉÍÓÚÜÑ';
 const _sinTilde = 'aeiouunAEIOUUN';
 
-String _normalizar(String s) {
+/// Pasa [s] a minúsculas y le quita las tildes, para comparar textos.
+String normalizarTexto(String s) {
   final b = StringBuffer();
   for (final c in s.split('')) {
     final i = _conTilde.indexOf(c);

@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/error/failure.dart';
+import '../../../../shared/models/zona.dart';
 import '../data/zonas_repository.dart';
 
 /// Catálogo de zonas y las elegidas por el Transportista.
