@@ -96,7 +96,11 @@ class _SolicitudCard extends StatelessWidget {
                   '${s.cantidadObjetos} '
                   '${s.cantidadObjetos == 1 ? 'objeto' : 'objetos'} · '
                   '${s.pesoTotalKg.legible} kg · ${s.volumenTotalM3.legible} m³'
-                  '${s.cantidadAyudantesSolicitados > 0 ? ' · pide ${s.cantidadAyudantesSolicitados} ayudantes' : ''}',
+                  '${switch (s.cantidadAyudantesSolicitados) {
+                    0 => '',
+                    1 => ' · pide 1 ayudante',
+                    final n => ' · pide $n ayudantes',
+                  }}',
                   style: tema.textTheme.bodySmall,
                 ),
               ],
