@@ -67,6 +67,12 @@ class InicioTransportistaScreen extends ConsumerWidget {
           ),
           for (final (icono, titulo, detalle, ruta) in const [
             (
+              Icons.campaign_outlined,
+              'Solicitudes en tus zonas',
+              'Lo que podés ofertar ahora.',
+              '/transportista/solicitudes',
+            ),
+            (
               Icons.local_shipping_outlined,
               'Mis vehículos',
               'Medidas, carga útil y costos.',
