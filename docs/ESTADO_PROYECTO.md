@@ -2,7 +2,7 @@
 
 > Foto viva del avance. Actualizar al cerrar cada bloque. Fechas absolutas.
 
-**Última actualización:** 2026-10-01 · **Etapa:** definiciones cerradas, listo para construir (ver `../fletway-backend/docs/PLAN_CONSTRUCCION.md`)
+**Última actualización:** 2026-10-02 · **Etapa:** construcción; módulo 1 (design system y componentes base) terminado
 
 ---
 
@@ -30,7 +30,7 @@ solo el router con placeholders.
 | Skills de Claude Code | Hecho | `new-screen`, `sync-api-models`, `feature-scaffold`. |
 | CI + pre-commit | Hecho | `.github/workflows/ci.yml` (pub get → codegen → format → analyze → custom_lint → test); `scripts/pre-commit`. |
 | Convenciones de código y UI | Definidas (2026-09-26) | `CLAUDE.md` §5: formato y análisis estático, modularización `core/` `features/` `shared/`, separación UI/lógica con Riverpod, design system, componentes compartidos, dartdoc y prohibición de emojis. |
-| Design system y componentes compartidos | Pendiente | Reglas definidas en `CLAUDE.md` §5; falta crear `lib/shared/design_system/` y los componentes `Fletway*` en `lib/shared/widgets/`. Valores definidos (2026-10-01): primario naranja tostado `#C36224`, secundarios grises y fondo blanco (`ColorScheme.fromSeed`), tipografía Material 3 por defecto, radios 4/8/16/999. |
+| Design system y componentes compartidos | Hecho (2026-10-02, módulo 1) | Tokens en `lib/shared/design_system/` (primario `#C36224`, grises, fondo blanco), tema claro y oscuro en `theme.dart`, y `FletwayButton`, `FletwayTextField`, `FletwayCard` y las vistas de carga, error y vacío, con widget tests. Faltan `FletwayConfirmDialog` y las variantes numérica y de selector del campo, que se suman cuando una pantalla las necesite. |
 | Pantallas de negocio (Cliente / Transportista) | Pendiente | El router tiene solo `_Placeholder`. |
 | Toolchain Android (SDK, emulador) | Pendiente | No instalado. No hace falta para analyze/test/codegen; sí para `flutter run`. |
 
@@ -43,8 +43,7 @@ juntos, módulo a módulo). Lo propio de la app:
 
 1. Completar `.env` real (`API_BASE_URL` con `/api`, `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`)
    desde el gestor de contraseñas del equipo.
-2. **Módulo 1:** design system (`lib/shared/design_system/`, primario `#C36224`, grises y blanco) y
-   componentes base `Fletway*` en `lib/shared/widgets/`.
+2. ~~**Módulo 1:** design system y componentes base.~~ **Hecho 2026-10-02.**
 3. **Módulo 2:** login y registro; `auth_controller` pasa a usar `GET /me` para rol y habilitación
    (resuelve el `TODO` actual).
 4. **Módulos 3 en adelante:** pantallas según el mapa de `docs/ARQUITECTURA.md` §7, con
@@ -79,3 +78,4 @@ juntos, módulo a módulo). Lo propio de la app:
 | 2026-09-26 | Emoji quitado de la salida de `scripts/pre-commit`. PR #2 mergeado; CI de `main` verde. No quedan emojis en archivos versionados ni ramas secundarias. |
 | 2026-10-01 | Definiciones para empezar la construcción: sólo Android, sin push en esta etapa, rol desde `GET /me`, dirección y mapa sin API por ahora, archivos con `image_picker`/`file_picker`, es-AR, comportamiento sin conexión (M-07 a M-13 en `ARQUITECTURA.md`), mapa de pantallas por rol (`ARQUITECTURA.md` §7), valores del design system, PIN que sólo ve el Cliente, score sin cercanía y contratos con prefijo `/api` (`API_CONTRATOS.md`). |
 | 2026-10-01 | Color definido: primario naranja tostado `#C36224`, secundarios grises y fondo blanco. El alta de vehículo propone las medidas estándar del tipo elegido (D-32 del backend). |
+| 2026-10-02 | Módulo 1: design system y componentes base. Verificado con Flutter 3.47.6: `dart format`, `flutter analyze`, `custom_lint` y 13 tests en verde. |
