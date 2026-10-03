@@ -4,7 +4,7 @@
 > el mapeo *endpoint del backend → feature / repo / modelo Dart* en esta app.
 > La skill `sync-api-models` lo mantiene alineado.
 
-**Última actualización:** 2026-10-01 · **Versión de contrato del backend:** `v0` (draft, `ENDPOINTS.md` del 2026-10-01)
+**Última actualización:** 2026-10-02 · **Versión de contrato del backend:** `v0` (draft, `ENDPOINTS.md` del 2026-10-02)
 
 ---
 
@@ -29,8 +29,9 @@
 | Endpoint | App: repo / uso |
 |----------|-----------------|
 | `GET /healthz`, `GET /readyz` | `core/network` — chequeo de conectividad opcional en el splash. |
-
-*(nada de negocio todavía)*
+| Supabase Auth `signUp` / `signInWithPassword` | `core/auth/auth_repository.dart`. El signUp lleva `rol`, `nombre_completo` y `telefono` en la metadata (D-18); el trigger de la base crea `usuario`. |
+| `GET /me` | `core/auth/perfil_repository.dart` → `Me` (`shared/models/me.dart`). Única fuente del rol y la habilitación (`AuthController`). |
+| `POST /auth/registro/cliente`, `POST /auth/registro/transportista` | `PerfilRepository.completarRegistro`, sin body; responde `Me`. Lo llama el `AuthController` cuando `registro_completo` es false (idempotente). |
 
 ---
 
@@ -38,10 +39,6 @@
 
 | Mód. | RF/RN | Endpoint (relativo a `API_BASE_URL`) | Rol | Feature en esta app | Modelo(s) Dart |
 |------|-------|--------------------------------------|-----|---------------------|----------------|
-| 2 | (login) | Supabase Auth (GoTrue) directo | ambos | `core/auth` | `AppUser` |
-| 2 | — | `GET /me` | ambos | `core/auth` | `Perfil` (rol, habilitación) |
-| 2 | RF-05 | `POST /auth/registro/cliente` | Cliente | `features/auth` | `RegistroClienteRequest` |
-| 2 | RF-16 | `POST /auth/registro/transportista` | Transportista | `features/auth` | `RegistroTransportistaRequest` |
 | 3 | RF-16 | `POST /transportista/documentos`, `GET /transportista/documentos` | Transportista | `features/carrier/habilitacion` | `DocumentoTransportista` |
 | 4 | RF-18 | `POST /transportista/vehiculos`, `GET /transportista/vehiculos`, `PUT /transportista/vehiculos/{id}/costos` | Transportista | `features/carrier/vehiculo` | `Vehiculo`, `VehiculoCosto`, `TipoVehiculo` |
 | 4 | RN-04 | `GET /zonas`, `PUT /transportista/zonas`, `PUT /transportista/disponibilidad` | Transportista | `features/carrier/vehiculo` (o `zonas`) | `Zona` |
