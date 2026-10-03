@@ -13,7 +13,9 @@ import '../features/carrier/vehiculo/presentation/alta_vehiculo_screen.dart';
 import '../features/carrier/vehiculo/presentation/costos_vehiculo_screen.dart';
 import '../features/carrier/vehiculo/presentation/vehiculos_screen.dart';
 import '../features/carrier/zonas/presentation/zonas_screen.dart';
-import '../features/client/solicitudes/presentation/selector_objeto_sheet.dart';
+import '../features/client/solicitudes/presentation/detalle_solicitud_screen.dart';
+import '../features/client/solicitudes/presentation/mis_solicitudes_screen.dart';
+import '../features/client/solicitudes/presentation/publicar_solicitud_screen.dart';
 
 /// Rutas de la app. Cliente y Transportista tienen árboles separados
 /// (`/cliente/...` y `/transportista/...`); el `redirect` central
@@ -46,16 +48,17 @@ final routerProvider = Provider<GoRouter>((ref) {
       // --- Árbol Cliente (RF-05..RF-15) ---
       GoRoute(
         path: '/cliente',
-        builder: (_, __) => const _Placeholder(
-          'Home Cliente',
-          conCerrarSesion: true,
-          conCatalogo: true,
-        ),
+        builder: (_, __) => const MisSolicitudesScreen(),
         routes: [
+          // 'nueva' antes de ':id' para que no la tome como un id.
           GoRoute(
             path: 'solicitudes/nueva',
-            builder: (_, __) =>
-                const _Placeholder('Publicar solicitud (RF-06)'),
+            builder: (_, __) => const PublicarSolicitudScreen(),
+          ),
+          GoRoute(
+            path: 'solicitudes/:id',
+            builder: (_, state) => DetalleSolicitudScreen(
+                solicitudId: state.pathParameters['id']!),
           ),
           GoRoute(
             path: 'solicitudes/:id/ofertas',
@@ -151,44 +154,13 @@ String? resolverRedireccion(AuthSessionState auth, String ubicacion) {
 
 /// Placeholder mientras no existan las pantallas reales. Reemplazar con la skill
 /// `new-screen`.
-class _Placeholder extends ConsumerWidget {
-  const _Placeholder(
-    this.label, {
-    this.conCerrarSesion = false,
-    this.conCatalogo = false,
-  });
+class _Placeholder extends StatelessWidget {
+  const _Placeholder(this.label);
   final String label;
-  final bool conCerrarSesion;
-  // Provisorio hasta la publicación de solicitudes (módulo 6), que es quien
-  // usa el selector: permite probar el catálogo en la app.
-  final bool conCatalogo;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) => Scaffold(
-        appBar: AppBar(
-          title: Text(label),
-          actions: [
-            if (conCatalogo)
-              IconButton(
-                tooltip: 'Catálogo de objetos',
-                icon: const Icon(Icons.chair_outlined),
-                onPressed: () async {
-                  final objeto = await elegirObjetoDelCatalogo(context);
-                  if (objeto != null && context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Elegiste: ${objeto.nombre}')),
-                    );
-                  }
-                },
-              ),
-            if (conCerrarSesion)
-              IconButton(
-                tooltip: 'Cerrar sesión',
-                icon: const Icon(Icons.logout),
-                onPressed: ref.read(authControllerProvider.notifier).signOut,
-              ),
-          ],
-        ),
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(title: Text(label)),
         body: Center(child: Text('TODO: $label')),
       );
 }

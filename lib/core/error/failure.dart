@@ -72,8 +72,17 @@ class Failure {
         'tipo_vehiculo_invalido' => 'Elegí un tipo de vehículo de la lista.',
         'vehiculo_no_encontrado' => 'No encontramos ese vehículo.',
         'zona_invalida' => 'Alguna de las zonas elegidas ya no existe.',
+        'fecha_pasada' => 'La fecha no puede ser anterior a hoy.',
+        'objeto_invalido' => 'Algún objeto del catálogo ya no existe.',
+        'direccion_no_ubicable' =>
+          'No pudimos ubicar la dirección en la zona elegida.',
+        'no_es_cliente' => 'Sólo un Cliente puede publicar solicitudes.',
+        'solicitud_no_encontrada' => 'No encontramos esa solicitud.',
+        'solicitud_no_cancelable' => 'Esta solicitud ya no se puede cancelar.',
+        'solicitud_no_vencida' =>
+          'Sólo se puede republicar una solicitud vencida.',
         'no_es_transportista' =>
-          'Sólo un Transportista registrado puede cargar documentación.',
+          'Esta acción es sólo para Transportistas registrados.',
         _ => null,
       };
 
