@@ -4,10 +4,14 @@ import 'package:go_router/go_router.dart';
 
 import '../core/auth/app_user.dart';
 import '../core/auth/auth_controller.dart';
+import '../features/auth/presentation/inicio_screen.dart';
+import '../features/auth/presentation/login_screen.dart';
+import '../features/auth/presentation/registro_screen.dart';
 
 /// Rutas de la app. Cliente y Transportista tienen árboles separados
-/// (`/cliente/...` y `/transportista/...`); un `redirect` central hace de guard
-/// de auth y de rol (ver docs/ARQUITECTURA.md §4).
+/// (`/cliente/...` y `/transportista/...`); el `redirect` central
+/// ([resolverRedireccion]) hace de guard de sesión y de rol con el perfil de
+/// `GET /me` (D-18). Depende de [authControllerProvider].
 final routerProvider = Provider<GoRouter>((ref) {
   final notifier = ValueNotifier<int>(0);
   ref.listen(authControllerProvider, (_, __) => notifier.value++);
@@ -16,43 +20,27 @@ final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     initialLocation: '/login',
     refreshListenable: notifier,
-    redirect: (context, state) {
-      final auth = ref.read(authControllerProvider);
-      final loggingIn = state.matchedLocation == '/login' ||
-          state.matchedLocation.startsWith('/registro');
-
-      if (!auth.isAuthenticated) {
-        return loggingIn ? null : '/login';
-      }
-
-      // Autenticado: mandar a la raíz del rol y no dejar entrar al árbol ajeno.
-      final home = auth.user!.role == UserRole.transportista
-          ? '/transportista'
-          : '/cliente';
-      if (loggingIn) return home;
-
-      final enClienteArea = state.matchedLocation.startsWith('/cliente');
-      final enCarrierArea = state.matchedLocation.startsWith('/transportista');
-      if (auth.user!.esCliente && enCarrierArea) return home;
-      if (auth.user!.esTransportista && enClienteArea) return home;
-      return null;
-    },
+    redirect: (context, state) => resolverRedireccion(
+      ref.read(authControllerProvider),
+      state.matchedLocation,
+    ),
     routes: [
-      GoRoute(path: '/login', builder: (_, __) => const _Placeholder('Login')),
+      GoRoute(path: '/login', builder: (_, __) => const LoginScreen()),
+      GoRoute(path: '/inicio', builder: (_, __) => const InicioScreen()),
       GoRoute(
         path: '/registro/cliente',
-        builder: (_, __) => const _Placeholder('Registro Cliente (RF-05)'),
+        builder: (_, __) => const RegistroScreen(rol: UserRole.cliente),
       ),
       GoRoute(
         path: '/registro/transportista',
-        builder: (_, __) =>
-            const _Placeholder('Registro Transportista (RF-16)'),
+        builder: (_, __) => const RegistroScreen(rol: UserRole.transportista),
       ),
 
       // --- Árbol Cliente (RF-05..RF-15) ---
       GoRoute(
         path: '/cliente',
-        builder: (_, __) => const _Placeholder('Home Cliente'),
+        builder: (_, __) =>
+            const _Placeholder('Home Cliente', conCerrarSesion: true),
         routes: [
           GoRoute(
             path: 'solicitudes/nueva',
@@ -75,7 +63,8 @@ final routerProvider = Provider<GoRouter>((ref) {
       // --- Árbol Transportista (RF-16..RF-24) ---
       GoRoute(
         path: '/transportista',
-        builder: (_, __) => const _Placeholder('Home Transportista'),
+        builder: (_, __) =>
+            const _Placeholder('Home Transportista', conCerrarSesion: true),
         routes: [
           GoRoute(
             path: 'habilitacion',
@@ -98,15 +87,53 @@ final routerProvider = Provider<GoRouter>((ref) {
   );
 });
 
+/// Decide a dónde redirigir según la sesión y la ruta pedida [ubicacion];
+/// null si puede quedarse.
+///
+/// - Sin sesión: sólo login y registro.
+/// - Con sesión y perfil cargándose o con error: la pantalla de inicio.
+/// - Autenticado: fuera de login, registro e inicio, y nunca en el árbol del
+///   otro rol (un rol por cuenta, D-17).
+String? resolverRedireccion(AuthSessionState auth, String ubicacion) {
+  final publica = ubicacion == '/login' || ubicacion.startsWith('/registro');
+  switch (auth.estado) {
+    case AuthEstado.noAutenticado:
+      return publica ? null : '/login';
+    case AuthEstado.cargando:
+    case AuthEstado.error:
+      return ubicacion == '/inicio' ? null : '/inicio';
+    case AuthEstado.autenticado:
+      final user = auth.user!;
+      final home = user.esTransportista ? '/transportista' : '/cliente';
+      if (publica || ubicacion == '/inicio') return home;
+      final enCliente = ubicacion.startsWith('/cliente');
+      final enTransportista = ubicacion.startsWith('/transportista');
+      if (user.esCliente && enTransportista) return home;
+      if (user.esTransportista && enCliente) return home;
+      return null;
+  }
+}
+
 /// Placeholder mientras no existan las pantallas reales. Reemplazar con la skill
 /// `new-screen`.
-class _Placeholder extends StatelessWidget {
-  const _Placeholder(this.label);
+class _Placeholder extends ConsumerWidget {
+  const _Placeholder(this.label, {this.conCerrarSesion = false});
   final String label;
+  final bool conCerrarSesion;
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(title: Text(label)),
+  Widget build(BuildContext context, WidgetRef ref) => Scaffold(
+        appBar: AppBar(
+          title: Text(label),
+          actions: [
+            if (conCerrarSesion)
+              IconButton(
+                tooltip: 'Cerrar sesión',
+                icon: const Icon(Icons.logout),
+                onPressed: ref.read(authControllerProvider.notifier).signOut,
+              ),
+          ],
+        ),
         body: Center(child: Text('TODO: $label')),
       );
 }
