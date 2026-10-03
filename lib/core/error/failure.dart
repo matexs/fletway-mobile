@@ -35,6 +35,15 @@ class Failure {
             .join('\n');
         return Failure('Revisá los datos.\n$detalle', code: error.code);
       }
+      if (error.code == 'carga_no_factible' &&
+          error.details['motivos'] is List) {
+        // El backend explica por objeto por qué la carga no entra (RN-02).
+        final motivos = (error.details['motivos'] as List)
+            .map((m) => '- ${_mayuscula('$m')}')
+            .join('\n');
+        return Failure('La carga no entra en este vehículo:\n$motivos',
+            code: error.code);
+      }
       return Failure(
         _mensajePorCodigo(error.code) ?? error.message,
         code: error.code,
@@ -83,8 +92,28 @@ class Failure {
           'Sólo se puede republicar una solicitud vencida.',
         'no_es_transportista' =>
           'Esta acción es sólo para Transportistas registrados.',
+        'transportista_no_disponible' =>
+          'Activá "Estoy tomando trabajos" en el inicio para ofertar.',
+        'solicitud_no_disponible' =>
+          'Esta solicitud ya no está disponible para ofertar.',
+        'vehiculo_inactivo' => 'El vehículo está inactivo.',
+        'costos_no_cargados' =>
+          'Cargá los costos del vehículo antes de ofertar con él.',
+        'carga_no_factible' => 'La carga no entra en este vehículo.',
+        'calculo_demorado' =>
+          'El cálculo de viajes tardó demasiado. Probá con un vehículo más '
+              'grande.',
+        'ruta_no_disponible' =>
+          'No pudimos calcular el recorrido. Probá de nuevo más tarde.',
+        'oferta_duplicada' =>
+          'Ya tenés una oferta vigente con ese vehículo para esta solicitud.',
+        'oferta_no_encontrada' => 'No encontramos esa oferta.',
+        'oferta_no_retirable' => 'Sólo se puede retirar una oferta pendiente.',
         _ => null,
       };
+
+  static String _mayuscula(String s) =>
+      s.isEmpty ? s : s[0].toUpperCase() + s.substring(1);
 
   // Códigos de Supabase Auth:
   // https://supabase.com/docs/guides/auth/debugging/error-codes

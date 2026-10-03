@@ -40,6 +40,7 @@
 | `GET /catalogo/objetos` | `features/client/solicitudes/data/catalogo_repository.dart` → `ObjetoCatalogo` (`objeto_dto.dart`); `catalogoProvider` lo pide una vez por sesión. |
 | `POST/GET /solicitudes`, `GET /solicitudes/{id}`, `.../cancelar`, `.../republicar` | `features/client/solicitudes/data/solicitudes_repository.dart` → `Solicitud`, `SolicitudResumen`, `NuevaSolicitud`, `PuntoNuevo`, `ObjetoNuevo` (`solicitud_dto.dart`). Un objeto del catálogo manda sólo `objeto_id` y `cantidad`; ningún modelo tiene montos. |
 | `GET /transportista/solicitudes` | `features/carrier/solicitudes/data/solicitudes_compatibles_repository.dart` → `SolicitudCompatible`; el detalle (`GET /solicitudes/{id}`) usa `Solicitud` de `shared/models/solicitud.dart`, compartido con el Cliente. |
+| `POST /solicitudes/{id}/ofertas/cotizar`, `POST /solicitudes/{id}/ofertas`, `POST /ofertas/{id}/retirar`, `GET /transportista/ofertas` | `features/carrier/ofertar/data/ofertas_repository.dart` → `Cotizacion`, `Oferta`, `DesgloseOferta` (`oferta_dto.dart`). El request es `vehiculo_id` + `cantidad_ayudantes` (0..3); `carga_no_factible` trae `details.motivos`, que `Failure` lista. El desglose sólo lo ve el Transportista (D-23). |
 
 ---
 
@@ -47,8 +48,6 @@
 
 | Mód. | RF/RN | Endpoint (relativo a `API_BASE_URL`) | Rol | Feature en esta app | Modelo(s) Dart |
 |------|-------|--------------------------------------|-----|---------------------|----------------|
-| 8 | RF-17 / RN-01 / RN-02 | `POST /solicitudes/{id}/ofertas` | Transportista | `features/carrier/ofertar` | `OfertaRequest` (`vehiculo_id`, `cantidad_ayudantes` 0..3), `Oferta` |
-| 8 | RF-17 | `POST /ofertas/{id}/retirar`, `GET /transportista/ofertas` | Transportista | `features/carrier/ofertar` | `Oferta` |
 | 9 | RF-07 / RN-05 | `GET /solicitudes/{id}/ofertas` (top 3, `?ver_mas=true`) | Cliente | `features/client/ofertas` | `OfertaConScore` (sólo `precio_calculado`, sin desglose) |
 | 9 | RF-11 | `GET /transportistas/{id}` | Cliente | `features/client/perfil` | `PerfilTransportista`, `Resena` |
 | 9 | RF-07 | `POST /ofertas/{id}/aceptar` | Cliente | `features/client/ofertas` | `Viaje` |

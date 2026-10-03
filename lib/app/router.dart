@@ -9,6 +9,8 @@ import '../features/auth/presentation/login_screen.dart';
 import '../features/auth/presentation/registro_screen.dart';
 import '../features/carrier/habilitacion/presentation/habilitacion_screen.dart';
 import '../features/carrier/inicio/presentation/inicio_transportista_screen.dart';
+import '../features/carrier/ofertar/presentation/armar_oferta_screen.dart';
+import '../features/carrier/ofertar/presentation/mis_ofertas_screen.dart';
 import '../features/carrier/solicitudes/presentation/detalle_compatible_screen.dart';
 import '../features/carrier/solicitudes/presentation/solicitudes_compatibles_screen.dart';
 import '../features/carrier/vehiculo/presentation/alta_vehiculo_screen.dart';
@@ -114,8 +116,20 @@ final routerProvider = Provider<GoRouter>((ref) {
                 builder: (_, state) => DetalleCompatibleScreen(
                   solicitudId: state.pathParameters['id']!,
                 ),
+                routes: [
+                  GoRoute(
+                    path: 'ofertar',
+                    builder: (_, state) => ArmarOfertaScreen(
+                      solicitudId: state.pathParameters['id']!,
+                    ),
+                  ),
+                ],
               ),
             ],
+          ),
+          GoRoute(
+            path: 'ofertas',
+            builder: (_, __) => const MisOfertasScreen(),
           ),
           GoRoute(
             path: 'viajes/:id',
