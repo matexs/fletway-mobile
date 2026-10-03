@@ -7,6 +7,7 @@ import '../core/auth/auth_controller.dart';
 import '../features/auth/presentation/inicio_screen.dart';
 import '../features/auth/presentation/login_screen.dart';
 import '../features/auth/presentation/registro_screen.dart';
+import '../features/carrier/habilitacion/presentation/habilitacion_screen.dart';
 
 /// Rutas de la app. Cliente y Transportista tienen árboles separados
 /// (`/cliente/...` y `/transportista/...`); el `redirect` central
@@ -63,13 +64,15 @@ final routerProvider = Provider<GoRouter>((ref) {
       // --- Árbol Transportista (RF-16..RF-24) ---
       GoRoute(
         path: '/transportista',
-        builder: (_, __) =>
-            const _Placeholder('Home Transportista', conCerrarSesion: true),
+        builder: (_, __) => const _Placeholder(
+          'Home Transportista',
+          conCerrarSesion: true,
+          rutaDocumentacion: '/transportista/habilitacion',
+        ),
         routes: [
           GoRoute(
             path: 'habilitacion',
-            builder: (_, __) =>
-                const _Placeholder('Estado de habilitación (RF-01)'),
+            builder: (_, __) => const HabilitacionScreen(),
           ),
           GoRoute(
             path: 'solicitudes',
@@ -94,6 +97,7 @@ final routerProvider = Provider<GoRouter>((ref) {
 /// - Con sesión y perfil cargándose o con error: la pantalla de inicio.
 /// - Autenticado: fuera de login, registro e inicio, y nunca en el árbol del
 ///   otro rol (un rol por cuenta, D-17).
+/// - Transportista no habilitado: su inicio es la documentación (RF-01).
 String? resolverRedireccion(AuthSessionState auth, String ubicacion) {
   final publica = ubicacion == '/login' || ubicacion.startsWith('/registro');
   switch (auth.estado) {
@@ -110,6 +114,11 @@ String? resolverRedireccion(AuthSessionState auth, String ubicacion) {
       final enTransportista = ubicacion.startsWith('/transportista');
       if (user.esCliente && enTransportista) return home;
       if (user.esTransportista && enCliente) return home;
+      // Mientras no está habilitado, su inicio es la documentación (RF-01).
+      if (ubicacion == '/transportista' &&
+          user.estadoHabilitacion != EstadoHabilitacion.habilitado) {
+        return '/transportista/habilitacion';
+      }
       return null;
   }
 }
@@ -117,15 +126,28 @@ String? resolverRedireccion(AuthSessionState auth, String ubicacion) {
 /// Placeholder mientras no existan las pantallas reales. Reemplazar con la skill
 /// `new-screen`.
 class _Placeholder extends ConsumerWidget {
-  const _Placeholder(this.label, {this.conCerrarSesion = false});
+  const _Placeholder(
+    this.label, {
+    this.conCerrarSesion = false,
+    this.rutaDocumentacion,
+  });
   final String label;
   final bool conCerrarSesion;
+  // Acceso a la documentación desde el inicio del Transportista habilitado
+  // (renovaciones, D-33).
+  final String? rutaDocumentacion;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) => Scaffold(
         appBar: AppBar(
           title: Text(label),
           actions: [
+            if (rutaDocumentacion != null)
+              IconButton(
+                tooltip: 'Mi documentación',
+                icon: const Icon(Icons.badge_outlined),
+                onPressed: () => context.push(rutaDocumentacion!),
+              ),
             if (conCerrarSesion)
               IconButton(
                 tooltip: 'Cerrar sesión',
