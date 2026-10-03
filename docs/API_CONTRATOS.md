@@ -37,7 +37,8 @@
 | `GET /tipos-vehiculo`, `POST/GET /transportista/vehiculos`, `PUT .../{id}/activo`, `PUT/GET .../{id}/costos` | `features/carrier/vehiculo/data/vehiculo_repository.dart` → `TipoVehiculo`, `Vehiculo`, `NuevoVehiculo`, `CostosVehiculo` (`vehiculo_dto.dart`). Medidas y montos como `double` (números JSON, D-11). `costos_no_cargados` se traduce a null. |
 | `GET /zonas`, `GET/PUT /transportista/zonas` | `features/carrier/zonas/data/zonas_repository.dart` → `Zona`, set de ids. |
 | `PUT /transportista/disponibilidad` | `features/carrier/inicio/data/disponibilidad_repository.dart` → `Me`, que se aplica a la sesión (`AuthController.aplicarPerfil`). `Me.disponible` viene también en `GET /me`. |
-| `GET /catalogo/objetos` | `features/client/catalogo/data/catalogo_repository.dart` → `ObjetoCatalogo` (`objeto_dto.dart`); `catalogoProvider` lo pide una vez por sesión. |
+| `GET /catalogo/objetos` | `features/client/solicitudes/data/catalogo_repository.dart` → `ObjetoCatalogo` (`objeto_dto.dart`); `catalogoProvider` lo pide una vez por sesión. |
+| `POST/GET /solicitudes`, `GET /solicitudes/{id}`, `.../cancelar`, `.../republicar` | `features/client/solicitudes/data/solicitudes_repository.dart` → `Solicitud`, `SolicitudResumen`, `NuevaSolicitud`, `PuntoNuevo`, `ObjetoNuevo` (`solicitud_dto.dart`). Un objeto del catálogo manda sólo `objeto_id` y `cantidad`; ningún modelo tiene montos. |
 
 ---
 
@@ -45,8 +46,6 @@
 
 | Mód. | RF/RN | Endpoint (relativo a `API_BASE_URL`) | Rol | Feature en esta app | Modelo(s) Dart |
 |------|-------|--------------------------------------|-----|---------------------|----------------|
-| 6 | RF-06 | `POST /solicitudes`, `GET /solicitudes`, `GET /solicitudes/{id}` | Cliente | `features/client/solicitudes` | `Solicitud`, `SolicitudObjeto` (sin monto, D-13) |
-| 6 | RF-06 | `POST /solicitudes/{id}/cancelar`, `POST /solicitudes/{id}/republicar` | Cliente | `features/client/solicitudes` | `RepublicarRequest` |
 | 7 | RF-17 / RN-04 | `GET /transportista/solicitudes` | Transportista | `features/carrier/ofertar` | `SolicitudCompatible` |
 | 8 | RF-17 / RN-01 / RN-02 | `POST /solicitudes/{id}/ofertas` | Transportista | `features/carrier/ofertar` | `OfertaRequest` (`vehiculo_id`, `cantidad_ayudantes` 0..3), `Oferta` |
 | 8 | RF-17 | `POST /ofertas/{id}/retirar`, `GET /transportista/ofertas` | Transportista | `features/carrier/ofertar` | `Oferta` |

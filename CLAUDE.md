@@ -260,10 +260,11 @@ el resto de la app los consume desde ahí o desde el `Theme`.
   feature: reciben datos y callbacks por parámetro.
 - Estado actual: implementados `FletwayButton`, `FletwayTextField` (con la variante
   `FletwayTextField.decimal` para medidas y montos: coma o punto, unidad como sufijo y
-  `FletwayTextField.leerDecimal` para leerlo), `FletwaySelector`, `FletwayCard`, `FletwayLoading`,
-  `FletwayErrorView` y `FletwayEmptyView` (importar `widgets.dart`). Se agrega cuando la primera
-  pantalla lo necesite: `FletwayConfirmDialog`. Los números se muestran en es-AR con la extensión
-  de `lib/shared/extensions/numeros.dart`.
+  `FletwayTextField.leerDecimal` para leerlo), `FletwaySelector`, `FletwaySeccion` (encabezado
+  con ícono), `FletwayCard`, `FletwayLoading`, `FletwayErrorView`, `FletwayEmptyView` y
+  `FletwayConfirmDialog` (usarlo con `confirmarFletway`) (importar `widgets.dart`). Los números y
+  las fechas se muestran en es-AR con las extensiones de `lib/shared/extensions/` (`numeros.dart`,
+  `fechas.dart`); la app usa `flutter_localizations` con `es_AR` (selector de fecha y hora).
 
 ### Decoración mínima de cada pantalla
 
