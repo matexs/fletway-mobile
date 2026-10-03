@@ -62,6 +62,14 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
 
       // --- Árbol Transportista (RF-16..RF-24) ---
+      // De primer nivel a propósito: para el no habilitado es su inicio y no
+      // tiene que quedar el inicio del Transportista debajo (go_router no
+      // vuelve a pasar por el redirect al hacer pop). El habilitado la abre
+      // con push desde su inicio.
+      GoRoute(
+        path: '/transportista/habilitacion',
+        builder: (_, __) => const HabilitacionScreen(),
+      ),
       GoRoute(
         path: '/transportista',
         builder: (_, __) => const _Placeholder(
@@ -70,10 +78,6 @@ final routerProvider = Provider<GoRouter>((ref) {
           rutaDocumentacion: '/transportista/habilitacion',
         ),
         routes: [
-          GoRoute(
-            path: 'habilitacion',
-            builder: (_, __) => const HabilitacionScreen(),
-          ),
           GoRoute(
             path: 'solicitudes',
             builder: (_, __) =>
