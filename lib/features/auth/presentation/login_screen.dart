@@ -25,6 +25,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _email = TextEditingController();
   final _contrasena = TextEditingController();
 
+  // Después del primer envío, cada campo se revalida al editarlo para que el
+  // error desaparezca apenas se corrige.
+  var _enviado = false;
+
   @override
   void dispose() {
     _email.dispose();
@@ -33,6 +37,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   void _ingresar() {
+    setState(() => _enviado = true);
     if (!_form.currentState!.validate()) return;
     ref
         .read(loginControllerProvider.notifier)
@@ -50,6 +55,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             padding: const EdgeInsets.all(FletwaySpacing.xl),
             child: Form(
               key: _form,
+              autovalidateMode: _enviado
+                  ? AutovalidateMode.onUserInteraction
+                  : AutovalidateMode.disabled,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -96,14 +104,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   FletwayButton(
                     texto: 'Crear cuenta de Cliente',
                     variante: FletwayButtonVariante.secundario,
-                    onPressed: () => context.go('/registro/cliente'),
+                    onPressed: () => context.push('/registro/cliente'),
                     anchoCompleto: true,
                   ),
                   const SizedBox(height: FletwaySpacing.sm),
                   FletwayButton(
                     texto: 'Quiero trabajar como Transportista',
                     variante: FletwayButtonVariante.texto,
-                    onPressed: () => context.go('/registro/transportista'),
+                    onPressed: () => context.push('/registro/transportista'),
                     anchoCompleto: true,
                   ),
                 ],
