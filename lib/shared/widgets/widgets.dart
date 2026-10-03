@@ -9,3 +9,4 @@ export 'fletway_estados_vista.dart';
 export 'fletway_seccion.dart';
 export 'fletway_selector.dart';
 export 'fletway_text_field.dart';
+export 'icono_objeto.dart';

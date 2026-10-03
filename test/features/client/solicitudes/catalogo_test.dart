@@ -3,7 +3,7 @@ import 'package:fletway_mobile/features/client/solicitudes/application/catalogo_
 import 'package:fletway_mobile/features/client/solicitudes/data/catalogo_repository.dart';
 import 'package:fletway_mobile/features/client/solicitudes/data/objeto_dto.dart';
 import 'package:fletway_mobile/features/client/solicitudes/presentation/selector_objeto_sheet.dart';
-import 'package:fletway_mobile/features/client/solicitudes/presentation/widgets/icono_objeto.dart';
+import 'package:fletway_mobile/shared/widgets/icono_objeto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
