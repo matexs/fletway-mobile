@@ -265,6 +265,20 @@ el resto de la app los consume desde ahí o desde el `Theme`.
   pantalla lo necesite: `FletwayConfirmDialog`. Los números se muestran en es-AR con la extensión
   de `lib/shared/extensions/numeros.dart`.
 
+### Decoración mínima de cada pantalla
+
+Hasta la pasada de UI/UX del módulo 15 (`../fletway-backend/docs/PLAN_CONSTRUCCION.md`), toda
+pantalla nueva cumple esto, que cuesta poco y evita que la deuda visual crezca:
+
+- **Íconos:** cada ítem de lista lleva un ícono de Material a la izquierda (`leading`), y cada
+  encabezado de sección o acceso, su ícono. Nunca emojis.
+- **Estados vacíos y de error:** siempre con ícono y, si existe, una acción para salir del
+  estado (`FletwayEmptyView(accion: ...)`, `FletwayErrorView(onReintentar: ...)`).
+- **Jerarquía:** título del ítem con `titleMedium`, el dato principal destacado (precio, estado,
+  fecha) y el detalle secundario con `bodySmall`. Los estados se marcan con color de
+  `FletwayEstados` o del `ColorScheme`, además del texto.
+- **Objetos del catálogo:** se muestran con `iconoDeObjeto` (catálogo de objetos).
+
 ### Documentación dartdoc
 
 - **Obligatorio `///`** en todo elemento público (sin `_`): widgets, clases, constructores con
