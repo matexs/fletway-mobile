@@ -47,7 +47,12 @@ class _PublicarSolicitudScreenState
     super.dispose();
   }
 
+  // Al cerrarse, un diálogo o panel devuelve el foco al último campo editado y
+  // abre el teclado sin que el usuario lo pida. Se suelta el foco antes de abrir.
+  void _soltarFoco() => FocusManager.instance.primaryFocus?.unfocus();
+
   Future<void> _elegirFecha() async {
+    _soltarFoco();
     final hoy = DateUtils.dateOnly(DateTime.now());
     final f = await showDatePicker(
       context: context,
@@ -59,6 +64,7 @@ class _PublicarSolicitudScreenState
   }
 
   Future<void> _elegirHora({required bool desde}) async {
+    _soltarFoco();
     final h = await showTimePicker(
       context: context,
       initialTime: (desde ? _desde : _hasta) ??
@@ -68,6 +74,7 @@ class _PublicarSolicitudScreenState
   }
 
   Future<void> _agregarDelCatalogo() async {
+    _soltarFoco();
     final o = await elegirObjetoDelCatalogo(context);
     if (o != null) {
       setState(() =>
@@ -76,6 +83,7 @@ class _PublicarSolicitudScreenState
   }
 
   Future<void> _agregarManual() async {
+    _soltarFoco();
     final o = await cargarObjetoManual(context);
     if (o != null) setState(() => _objetos = agregarObjeto(_objetos, o));
   }
@@ -94,6 +102,7 @@ class _PublicarSolicitudScreenState
   }
 
   void _publicar() {
+    _soltarFoco();
     setState(() => _enviado = true);
     final formOk = _form.currentState!.validate();
     final faltante = _faltante();
