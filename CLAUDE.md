@@ -236,8 +236,9 @@ el resto de la app los consume desde ahí o desde el `Theme`.
 - **Prohibido fuera de `lib/shared/design_system/` y `lib/app/theme.dart`:** literales de color
   (`Color(0x...)`, `Colors.xxx`), `TextStyle(fontSize: ...)`, paddings, gaps o radios numéricos
   (`EdgeInsets.all(13)`, `SizedBox(height: 10)`, `BorderRadius.circular(6)`).
-- Estado actual: `lib/shared/design_system/` todavía no existe y `theme.dart` usa la semilla
-  directamente. Se migra a tokens cuando se implemente el design system.
+- Estado actual: implementado (módulo 1). Tokens en `lib/shared/design_system/` (importar
+  `design_system.dart`) y tema en `lib/app/theme.dart`; los colores de estado se leen con
+  `Theme.of(context).extension<FletwayEstados>()!`.
 
 ### Componentes compartidos
 
@@ -257,8 +258,10 @@ el resto de la app los consume desde ahí o desde el `Theme`.
   tarjeta de oferta es un `FletwayCard` con contenido); no redefinen estilos.
 - Los componentes compartidos consumen sólo tokens y tema, no dependen de Riverpod ni de ninguna
   feature: reciben datos y callbacks por parámetro.
-- Estado actual: `lib/shared/widgets/` está vacío. Los componentes se crean a medida que la
-  primera pantalla los necesite, siguiendo estas reglas.
+- Estado actual: implementados `FletwayButton`, `FletwayTextField`, `FletwayCard`,
+  `FletwayLoading`, `FletwayErrorView` y `FletwayEmptyView` (importar `widgets.dart`). Se agregan
+  cuando la primera pantalla los necesite: `FletwayConfirmDialog` y las variantes numérica y de
+  selector del campo de texto.
 
 ### Documentación dartdoc
 
