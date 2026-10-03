@@ -13,6 +13,7 @@ import '../features/carrier/vehiculo/presentation/alta_vehiculo_screen.dart';
 import '../features/carrier/vehiculo/presentation/costos_vehiculo_screen.dart';
 import '../features/carrier/vehiculo/presentation/vehiculos_screen.dart';
 import '../features/carrier/zonas/presentation/zonas_screen.dart';
+import '../features/client/catalogo/presentation/selector_objeto_sheet.dart';
 
 /// Rutas de la app. Cliente y Transportista tienen árboles separados
 /// (`/cliente/...` y `/transportista/...`); el `redirect` central
@@ -45,8 +46,11 @@ final routerProvider = Provider<GoRouter>((ref) {
       // --- Árbol Cliente (RF-05..RF-15) ---
       GoRoute(
         path: '/cliente',
-        builder: (_, __) =>
-            const _Placeholder('Home Cliente', conCerrarSesion: true),
+        builder: (_, __) => const _Placeholder(
+          'Home Cliente',
+          conCerrarSesion: true,
+          conCatalogo: true,
+        ),
         routes: [
           GoRoute(
             path: 'solicitudes/nueva',
@@ -148,15 +152,35 @@ String? resolverRedireccion(AuthSessionState auth, String ubicacion) {
 /// Placeholder mientras no existan las pantallas reales. Reemplazar con la skill
 /// `new-screen`.
 class _Placeholder extends ConsumerWidget {
-  const _Placeholder(this.label, {this.conCerrarSesion = false});
+  const _Placeholder(
+    this.label, {
+    this.conCerrarSesion = false,
+    this.conCatalogo = false,
+  });
   final String label;
   final bool conCerrarSesion;
+  // Provisorio hasta la publicación de solicitudes (módulo 6), que es quien
+  // usa el selector: permite probar el catálogo en la app.
+  final bool conCatalogo;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) => Scaffold(
         appBar: AppBar(
           title: Text(label),
           actions: [
+            if (conCatalogo)
+              IconButton(
+                tooltip: 'Catálogo de objetos',
+                icon: const Icon(Icons.chair_outlined),
+                onPressed: () async {
+                  final objeto = await elegirObjetoDelCatalogo(context);
+                  if (objeto != null && context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Elegiste: ${objeto.nombre}')),
+                    );
+                  }
+                },
+              ),
             if (conCerrarSesion)
               IconButton(
                 tooltip: 'Cerrar sesión',

@@ -37,6 +37,7 @@
 | `GET /tipos-vehiculo`, `POST/GET /transportista/vehiculos`, `PUT .../{id}/activo`, `PUT/GET .../{id}/costos` | `features/carrier/vehiculo/data/vehiculo_repository.dart` → `TipoVehiculo`, `Vehiculo`, `NuevoVehiculo`, `CostosVehiculo` (`vehiculo_dto.dart`). Medidas y montos como `double` (números JSON, D-11). `costos_no_cargados` se traduce a null. |
 | `GET /zonas`, `GET/PUT /transportista/zonas` | `features/carrier/zonas/data/zonas_repository.dart` → `Zona`, set de ids. |
 | `PUT /transportista/disponibilidad` | `features/carrier/inicio/data/disponibilidad_repository.dart` → `Me`, que se aplica a la sesión (`AuthController.aplicarPerfil`). `Me.disponible` viene también en `GET /me`. |
+| `GET /catalogo/objetos` | `features/client/catalogo/data/catalogo_repository.dart` → `ObjetoCatalogo` (`objeto_dto.dart`); `catalogoProvider` lo pide una vez por sesión. |
 
 ---
 
@@ -44,7 +45,6 @@
 
 | Mód. | RF/RN | Endpoint (relativo a `API_BASE_URL`) | Rol | Feature en esta app | Modelo(s) Dart |
 |------|-------|--------------------------------------|-----|---------------------|----------------|
-| 5 | RN-08 | `GET /catalogo/objetos` | ambos | `shared` | `Objeto` |
 | 6 | RF-06 | `POST /solicitudes`, `GET /solicitudes`, `GET /solicitudes/{id}` | Cliente | `features/client/solicitudes` | `Solicitud`, `SolicitudObjeto` (sin monto, D-13) |
 | 6 | RF-06 | `POST /solicitudes/{id}/cancelar`, `POST /solicitudes/{id}/republicar` | Cliente | `features/client/solicitudes` | `RepublicarRequest` |
 | 7 | RF-17 / RN-04 | `GET /transportista/solicitudes` | Transportista | `features/carrier/ofertar` | `SolicitudCompatible` |
