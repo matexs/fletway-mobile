@@ -6,6 +6,7 @@ import '../../../../core/error/failure.dart';
 import '../../../../shared/design_system/design_system.dart';
 import '../../../../shared/extensions/fechas.dart';
 import '../../../../shared/extensions/numeros.dart';
+import '../../../../shared/mapa/mapa_ruta.dart';
 import '../../../../shared/models/solicitud.dart';
 import '../../../../shared/widgets/widgets.dart';
 import '../application/solicitudes_compatibles_controller.dart';
@@ -72,6 +73,8 @@ class DetalleCompatibleScreen extends ConsumerWidget {
                 ],
               ),
             ),
+            const SizedBox(height: FletwaySpacing.md),
+            MapaRutaSolicitud(solicitudId: s.id),
             const SizedBox(height: FletwaySpacing.xl),
             FletwaySeccion(
               icono: Icons.inventory_2_outlined,

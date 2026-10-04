@@ -6,6 +6,7 @@ import '../../../../core/error/failure.dart';
 import '../../../../shared/design_system/design_system.dart';
 import '../../../../shared/extensions/fechas.dart';
 import '../../../../shared/extensions/numeros.dart';
+import '../../../../shared/mapa/mapa_ruta.dart';
 import '../../../../shared/models/solicitud.dart';
 import '../../../../shared/widgets/widgets.dart';
 import '../../ofertas/presentation/widgets/ofertas_seccion.dart';
@@ -80,6 +81,8 @@ class DetalleSolicitudScreen extends ConsumerWidget {
             EstadoSolicitudChip(estado: s.estado),
             const SizedBox(height: FletwaySpacing.md),
             _Resumen(solicitud: s),
+            const SizedBox(height: FletwaySpacing.md),
+            MapaRutaSolicitud(solicitudId: s.id),
             if (s.estado == 'publicada') ...[
               const SizedBox(height: FletwaySpacing.xl),
               OfertasSeccion(solicitudId: s.id),

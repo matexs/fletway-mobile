@@ -43,6 +43,8 @@
 | `POST /solicitudes/{id}/ofertas/cotizar`, `POST /solicitudes/{id}/ofertas`, `POST /ofertas/{id}/retirar`, `GET /transportista/ofertas` | `features/carrier/ofertar/data/ofertas_repository.dart` → `Cotizacion`, `Oferta`, `DesgloseOferta` (`oferta_dto.dart`). El request es `vehiculo_id` + `cantidad_ayudantes` (0..3); `carga_no_factible` trae `details.motivos`, que `Failure` lista. El desglose sólo lo ve el Transportista (D-23). |
 | `GET /solicitudes/{id}/ofertas` (top 3; `?ver_mas=true&cursor=`), `POST /ofertas/{id}/aceptar` | `features/client/ofertas/data/ofertas_cliente_repository.dart` → `OfertasDeSolicitud`, `OfertaParaCliente`, `ViajeConfirmado` (`oferta_cliente_dto.dart`). Sin desglose ni patente hasta aceptar; la patente llega en `ViajeConfirmado`. |
 | `GET /transportistas/{id}` | `features/client/perfil/data/perfil_repository.dart` → `PerfilTransportista`, `Resena` (`perfil_dto.dart`). Sin contacto ni patentes. |
+| `GET /direcciones/sugerencias?zona_id=&q=` | `features/client/solicitudes/data/direcciones_repository.dart` → `SugerenciaDireccion`. Lo usa `CampoDireccion` al publicar: busca después de 3 letras y 400 ms sin escribir; si falla, se escribe a mano. |
+| `GET /solicitudes/{id}/ruta` | `shared/mapa/ruta.dart` → `RutaSolicitud` (extremos, distancia, minutos y trazado). `MapaRutaSolicitud` lo dibuja con OpenStreetMap en el detalle de la solicitud del Cliente y del Transportista. |
 
 ---
 

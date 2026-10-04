@@ -4,10 +4,11 @@ import '../../../../../shared/design_system/design_system.dart';
 import '../../../../../shared/models/zona.dart';
 import '../../../../../shared/widgets/widgets.dart';
 import '../../application/validadores_solicitud.dart';
+import 'campo_direccion.dart';
 
 /// Controladores de un origen o destino del formulario de publicación.
 class PuntoControllers {
-  /// Dirección escrita a mano (D-20).
+  /// Dirección, sugerida por el autocompletado o escrita a mano (D-20, D-35).
   final direccion = TextEditingController();
 
   /// Pisos por escalera.
@@ -84,12 +85,10 @@ class PuntoForm extends StatelessWidget {
             validator: (z) => z == null ? 'Elegí la zona.' : null,
           ),
           const SizedBox(height: FletwaySpacing.md),
-          FletwayTextField(
-            etiqueta: 'Dirección',
-            ayuda: 'Calle, número y piso o depto. si corresponde.',
+          CampoDireccion(
             controller: valores.direccion,
+            zona: valores.zona,
             validator: ValidadoresSolicitud.direccion,
-            accionTeclado: TextInputAction.next,
           ),
           const SizedBox(height: FletwaySpacing.md),
           Row(
