@@ -68,8 +68,7 @@ class ArmarOfertaScreen extends ConsumerWidget {
         ),
         data: (lista) => lista.isEmpty
             ? FletwayEmptyView(
-                mensaje: 'Para ofertar necesitás un vehículo con sus costos '
-                    'cargados.',
+                mensaje: 'Para ofertar necesitás al menos un vehículo.',
                 icono: Icons.local_shipping_outlined,
                 accion: FletwayButton(
                   texto: 'Agregar vehículo',
@@ -149,12 +148,8 @@ class _VehiculoOpcion extends StatelessWidget {
   Widget build(BuildContext context) {
     final v = vehiculo;
     final tema = Theme.of(context);
-    // Sin costos o inactivo no se puede ofertar: se explica en vez de ocultarlo.
-    final motivo = !v.activo
-        ? 'Inactivo'
-        : !v.tieneCostos
-            ? 'Cargá sus costos para ofertar con él'
-            : null;
+    // Un vehículo inactivo no sirve para ofertar: se explica en vez de ocultarlo.
+    final motivo = v.activo ? null : 'Inactivo: activalo en Mis vehículos';
     return Padding(
       padding: const EdgeInsets.only(top: FletwaySpacing.sm),
       child: FletwayCard(
@@ -184,12 +179,6 @@ class _VehiculoOpcion extends StatelessWidget {
                 ],
               ),
             ),
-            if (motivo != null && v.activo)
-              TextButton(
-                onPressed: () =>
-                    context.push('/transportista/vehiculos/${v.id}/costos'),
-                child: const Text('Cargar'),
-              ),
           ],
         ),
       ),

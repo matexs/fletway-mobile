@@ -14,7 +14,6 @@ import '../features/carrier/ofertar/presentation/mis_ofertas_screen.dart';
 import '../features/carrier/solicitudes/presentation/detalle_compatible_screen.dart';
 import '../features/carrier/solicitudes/presentation/solicitudes_compatibles_screen.dart';
 import '../features/carrier/vehiculo/presentation/alta_vehiculo_screen.dart';
-import '../features/carrier/vehiculo/presentation/costos_vehiculo_screen.dart';
 import '../features/carrier/vehiculo/presentation/vehiculos_screen.dart';
 import '../features/carrier/zonas/presentation/zonas_screen.dart';
 import '../features/client/solicitudes/presentation/detalle_solicitud_screen.dart';
@@ -97,12 +96,6 @@ final routerProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: 'nuevo',
                 builder: (_, __) => const AltaVehiculoScreen(),
-              ),
-              GoRoute(
-                path: ':id/costos',
-                builder: (_, state) => CostosVehiculoScreen(
-                  vehiculoId: state.pathParameters['id']!,
-                ),
               ),
             ],
           ),

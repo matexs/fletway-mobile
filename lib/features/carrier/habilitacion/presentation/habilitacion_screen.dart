@@ -85,7 +85,7 @@ class _HabilitacionScreenState extends ConsumerState<HabilitacionScreen> {
                       cargando ? null : () => _cargar(tipo.tipoDocumentoCodigo),
                 ),
               ],
-              // Para ofertar también hacen falta un vehículo con costos y zonas;
+              // Para ofertar también hacen falta un vehículo y zonas;
               // se pueden cargar mientras se revisa la documentación.
               if (mi.estadoHabilitacion != 'habilitado') ...[
                 const SizedBox(height: FletwaySpacing.xl),

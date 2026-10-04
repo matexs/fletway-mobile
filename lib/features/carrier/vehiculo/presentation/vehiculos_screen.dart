@@ -8,8 +8,7 @@ import '../../../../shared/widgets/widgets.dart';
 import '../application/vehiculos_controller.dart';
 import 'widgets/vehiculo_card.dart';
 
-/// Vehículos del Transportista: listado, alta y acceso a los costos de cada uno
-/// (RF-18).
+/// Vehículos del Transportista: listado, alta y activar o desactivar (RF-18).
 class VehiculosScreen extends ConsumerWidget {
   /// Crea la pantalla.
   const VehiculosScreen({super.key});
@@ -42,7 +41,7 @@ class VehiculosScreen extends ConsumerWidget {
             ? FletwayEmptyView(
                 mensaje:
                     'Todavía no cargaste vehículos. Necesitás al menos uno '
-                    'con sus costos para ofertar.',
+                    'para ofertar.',
                 icono: Icons.local_shipping_outlined,
                 accion: FletwayButton(
                   texto: 'Agregar vehículo',
@@ -66,9 +65,6 @@ class VehiculosScreen extends ConsumerWidget {
                       VehiculoCard(
                         vehiculo: v,
                         onActivo: (activo) => cambiarActivo(v.id, activo),
-                        onCostos: () => context.push(
-                          '/transportista/vehiculos/${v.id}/costos',
-                        ),
                       ),
                     ],
                   ],

@@ -81,7 +81,7 @@ class InicioTransportistaScreen extends ConsumerWidget {
             (
               Icons.local_shipping_outlined,
               'Mis vehículos',
-              'Medidas, carga útil y costos.',
+              'Medidas y carga útil.',
               '/transportista/vehiculos',
             ),
             (

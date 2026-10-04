@@ -5,16 +5,14 @@ import '../../../../../shared/extensions/numeros.dart';
 import '../../../../../shared/widgets/widgets.dart';
 import '../../data/vehiculo_dto.dart';
 
-/// Un vehículo del Transportista con sus medidas, el interruptor de activo y el
-/// acceso a sus costos (RF-18). Avisa si faltan los costos: sin ellos no puede
-/// ofertar con este vehículo (RN-01).
+/// Un vehículo del Transportista con sus medidas y el interruptor de activo
+/// (RF-18). Los costos que entran en el precio son de referencia por tipo de
+/// vehículo y los define la plataforma (D-34).
 class VehiculoCard extends StatelessWidget {
-  /// Crea la card. [onActivo] se dispara al mover el interruptor y [onCostos]
-  /// al tocar el botón de costos.
+  /// Crea la card. [onActivo] se dispara al mover el interruptor.
   const VehiculoCard({
     required this.vehiculo,
     required this.onActivo,
-    required this.onCostos,
     super.key,
   });
 
@@ -23,9 +21,6 @@ class VehiculoCard extends StatelessWidget {
 
   /// Cambia el estado activo. Null deshabilita el interruptor.
   final ValueChanged<bool>? onActivo;
-
-  /// Abre la pantalla de costos.
-  final VoidCallback onCostos;
 
   @override
   Widget build(BuildContext context) {
@@ -62,24 +57,6 @@ class VehiculoCard extends StatelessWidget {
               style: tema.textTheme.bodySmall,
             ),
           ],
-          if (!v.tieneCostos) ...[
-            const SizedBox(height: FletwaySpacing.sm),
-            Text(
-              'Faltan los costos: sin ellos no podés ofertar con este vehículo.',
-              style: tema.textTheme.bodyMedium?.copyWith(
-                color: tema.extension<FletwayEstados>()!.advertencia,
-              ),
-            ),
-          ],
-          const SizedBox(height: FletwaySpacing.md),
-          FletwayButton(
-            texto: v.tieneCostos ? 'Editar costos' : 'Cargar costos',
-            icono: Icons.payments_outlined,
-            variante: v.tieneCostos
-                ? FletwayButtonVariante.secundario
-                : FletwayButtonVariante.primario,
-            onPressed: onCostos,
-          ),
         ],
       ),
     );

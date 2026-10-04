@@ -97,8 +97,6 @@ class Failure {
         'solicitud_no_disponible' =>
           'Esta solicitud ya no está disponible para ofertar.',
         'vehiculo_inactivo' => 'El vehículo está inactivo.',
-        'costos_no_cargados' =>
-          'Cargá los costos del vehículo antes de ofertar con él.',
         'carga_no_factible' => 'La carga no entra en este vehículo.',
         'calculo_demorado' =>
           'El cálculo de viajes tardó demasiado. Probá con un vehículo más '

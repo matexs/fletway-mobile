@@ -25,8 +25,7 @@ class MockVehiculos extends Mock implements VehiculoRepository {}
 class MockSolicitudes extends Mock
     implements SolicitudesCompatiblesRepository {}
 
-Vehiculo _vehiculo(String id, {bool activo = true, bool costos = true}) =>
-    Vehiculo(
+Vehiculo _vehiculo(String id, {bool activo = true}) => Vehiculo(
       id: id,
       tipoVehiculoId: 't',
       tipoVehiculoNombre: 'Furgón chico',
@@ -36,7 +35,6 @@ Vehiculo _vehiculo(String id, {bool activo = true, bool costos = true}) =>
       altoUtilM: 1.15,
       pesoMaximoKg: 650,
       activo: activo,
-      tieneCostos: costos,
     );
 
 const _desglose = DesgloseOferta(
@@ -132,7 +130,7 @@ void main() {
         (tester) async {
       when(() => vehiculos.propios()).thenAnswer((_) async => [
             _vehiculo('1'),
-            _vehiculo('2', costos: false),
+            _vehiculo('2', activo: false),
           ]);
       when(() => ofertas.cotizar('s1', vehiculoId: '1', ayudantes: 0))
           .thenAnswer((_) async => _cotizacion(0, 80000));
@@ -145,8 +143,8 @@ void main() {
       await montar(tester, '/ofertar');
       expect(
           find.text('Elegí un vehículo para ver el precio.'), findsOneWidget);
-      expect(find.text('Cargá sus costos para ofertar con él'), findsOneWidget,
-          reason: 'el vehículo sin costos se explica, no se oculta');
+      expect(find.text('Inactivo: activalo en Mis vehículos'), findsOneWidget,
+          reason: 'el vehículo inactivo se explica, no se oculta');
 
       await tester.tap(find.text('Furgón chico · AB1CD'));
       await tester.pumpAndSettle();

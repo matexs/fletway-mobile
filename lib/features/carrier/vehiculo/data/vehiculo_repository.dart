@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/network/api_client.dart';
-import '../../../../core/network/api_exception.dart';
 import 'vehiculo_dto.dart';
 
 /// Repositorio de vehículos del Transportista. Depende de [apiClientProvider].
@@ -9,7 +8,7 @@ final vehiculoRepositoryProvider = Provider<VehiculoRepository>(
   (ref) => VehiculoRepository(ref.watch(apiClientProvider)),
 );
 
-/// Vehículos y costos contra el backend (RF-18, RN-01). Todos los métodos lanzan
+/// Vehículos del Transportista contra el backend (RF-18). Todos los métodos lanzan
 /// `ApiException`.
 class VehiculoRepository {
   /// Crea el repositorio sobre [ApiClient].
@@ -50,28 +49,5 @@ class VehiculoRepository {
       body: {'activo': activo},
     );
     return Vehiculo.fromJson(json);
-  }
-
-  /// `GET /transportista/vehiculos/{id}/costos`. Devuelve null si todavía no se
-  /// cargaron (`costos_no_cargados`).
-  Future<CostosVehiculo?> costos(String id) async {
-    try {
-      final json = await _api.get<Map<String, dynamic>>(
-        '/transportista/vehiculos/$id/costos',
-      );
-      return CostosVehiculo.fromJson(json);
-    } on ApiException catch (e) {
-      if (e.code == 'costos_no_cargados') return null;
-      rethrow;
-    }
-  }
-
-  /// `PUT /transportista/vehiculos/{id}/costos`: crea o reemplaza.
-  Future<CostosVehiculo> guardarCostos(String id, CostosVehiculo costos) async {
-    final json = await _api.put<Map<String, dynamic>>(
-      '/transportista/vehiculos/$id/costos',
-      body: costos.toJson(),
-    );
-    return CostosVehiculo.fromJson(json);
   }
 }

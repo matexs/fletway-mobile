@@ -41,9 +41,6 @@ abstract class Vehiculo with _$Vehiculo {
     /// Carga útil, no peso bruto.
     @JsonKey(name: 'peso_maximo_kg') required double pesoMaximoKg,
     required bool activo,
-
-    /// Sin costos cargados no sirve para ofertar (RN-01).
-    @JsonKey(name: 'tiene_costos') required bool tieneCostos,
   }) = _Vehiculo;
 
   /// Construye el vehículo desde el JSON de la API.
@@ -69,29 +66,4 @@ abstract class NuevoVehiculo with _$NuevoVehiculo {
   /// Construye el request desde JSON (para tests).
   factory NuevoVehiculo.fromJson(Map<String, dynamic> json) =>
       _$NuevoVehiculoFromJson(json);
-}
-
-/// Costos operativos de un vehículo (RN-01, `ALGORITMO_COTIZACION.md` §4.2).
-/// Sólo los ven el Transportista dueño y el Administrador.
-@freezed
-abstract class CostosVehiculo with _$CostosVehiculo {
-  /// Crea los costos; los campos espejan la API.
-  const factory CostosVehiculo({
-    @JsonKey(name: 'combustible_precio_l') required double combustiblePrecioL,
-    @JsonKey(name: 'rendimiento_km_l') required double rendimientoKmL,
-    @JsonKey(name: 'cantidad_neumaticos') required int cantidadNeumaticos,
-    @JsonKey(name: 'costo_neumatico') required double costoNeumatico,
-    @JsonKey(name: 'vida_neumatico_km') required double vidaNeumaticoKm,
-    @JsonKey(name: 'costo_mantenimiento_km')
-    required double costoMantenimientoKm,
-    @JsonKey(name: 'valor_compra') required double valorCompra,
-    @JsonKey(name: 'valor_residual') required double valorResidual,
-    @JsonKey(name: 'vida_util_km') required double vidaUtilKm,
-    @JsonKey(name: 'seguro_mensual') required double seguroMensual,
-    @JsonKey(name: 'patente_mensual') required double patenteMensual,
-  }) = _CostosVehiculo;
-
-  /// Construye los costos desde el JSON de la API.
-  factory CostosVehiculo.fromJson(Map<String, dynamic> json) =>
-      _$CostosVehiculoFromJson(json);
 }
