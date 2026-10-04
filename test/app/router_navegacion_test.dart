@@ -74,6 +74,8 @@ void main() {
     await montar(tester, 'habilitado');
     expect(find.byType(InicioTransportistaScreen), findsOneWidget);
 
+    await tester.ensureVisible(find.text('Mi documentación'));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Mi documentación'));
     await tester.pumpAndSettle();
     expect(find.byType(HabilitacionScreen), findsOneWidget);

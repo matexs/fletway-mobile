@@ -3,7 +3,6 @@ import 'package:fletway_mobile/features/carrier/vehiculo/application/validadores
 import 'package:fletway_mobile/features/carrier/vehiculo/data/vehiculo_dto.dart';
 import 'package:fletway_mobile/features/carrier/vehiculo/data/vehiculo_repository.dart';
 import 'package:fletway_mobile/features/carrier/vehiculo/presentation/alta_vehiculo_screen.dart';
-import 'package:fletway_mobile/features/carrier/vehiculo/presentation/costos_vehiculo_screen.dart';
 import 'package:fletway_mobile/features/carrier/vehiculo/presentation/vehiculos_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -32,7 +31,6 @@ const _vehiculo = Vehiculo(
   altoUtilM: 1.15,
   pesoMaximoKg: 650,
   activo: true,
-  tieneCostos: false,
 );
 
 void main() {
@@ -47,21 +45,6 @@ void main() {
         anchoUtilM: 0,
         altoUtilM: 0,
         pesoMaximoKg: 0,
-      ),
-    );
-    registerFallbackValue(
-      const CostosVehiculo(
-        combustiblePrecioL: 0,
-        rendimientoKmL: 0,
-        cantidadNeumaticos: 0,
-        costoNeumatico: 0,
-        vidaNeumaticoKm: 0,
-        costoMantenimientoKm: 0,
-        valorCompra: 0,
-        valorResidual: 0,
-        vidaUtilKm: 0,
-        seguroMensual: 0,
-        patenteMensual: 0,
       ),
     );
   });
@@ -80,11 +63,6 @@ void main() {
         GoRoute(
           path: '/transportista/vehiculos/nuevo',
           builder: (_, __) => const AltaVehiculoScreen(),
-        ),
-        GoRoute(
-          path: '/transportista/vehiculos/:id/costos',
-          builder: (_, s) =>
-              CostosVehiculoScreen(vehiculoId: s.pathParameters['id']!),
         ),
       ],
     );
@@ -128,8 +106,10 @@ void main() {
   ) async {
     when(() => repo.tipos()).thenAnswer((_) async => [_furgon]);
     when(() => repo.crear(any())).thenAnswer((_) async => _vehiculo);
-    when(() => repo.costos(any())).thenAnswer((_) async => null);
-    await montar(tester, '/transportista/vehiculos/nuevo');
+    when(() => repo.propios()).thenAnswer((_) async => []);
+    await montar(tester, '/v');
+    await tester.tap(find.text('Agregar vehículo'));
+    await tester.pumpAndSettle();
 
     await tester.tap(find.text('Tipo de vehículo'));
     await tester.pumpAndSettle();
@@ -143,7 +123,7 @@ void main() {
 
     await tester.enterText(campo('Patente'), 'ab 123 cd');
     await tester.enterText(campo('Largo'), '2,4');
-    await tester.tap(find.text('Guardar y cargar costos'));
+    await tester.tap(find.text('Guardar vehículo'));
     await tester.pumpAndSettle();
 
     final enviado =
@@ -152,55 +132,12 @@ void main() {
     expect(enviado.largoUtilM, 2.4);
     expect(enviado.anchoUtilM, 1.5);
     expect(enviado.pesoMaximoKg, 700);
-    expect(
-      find.byType(CostosVehiculoScreen),
-      findsOneWidget,
-      reason: 'sigue el segundo paso: costos',
-    );
+    expect(find.byType(VehiculosScreen), findsOneWidget,
+        reason: 'vuelve al listado: no hay segundo paso de costos (D-34)');
+    expect(find.text('Vehículo AB123CD agregado.'), findsOneWidget);
   });
 
-  testWidgets('costos: valida el residual y manda los números', (tester) async {
-    when(() => repo.costos('v1')).thenAnswer((_) async => null);
-    when(
-      () => repo.guardarCostos(any(), any()),
-    ).thenAnswer((i) async => i.positionalArguments[1] as CostosVehiculo);
-    await montar(tester, '/transportista/vehiculos/v1/costos');
-
-    final valores = {
-      'Precio del combustible': '1350,50',
-      'Rendimiento': '9,5',
-      'Cantidad de neumáticos': '4',
-      'Precio de un neumático': '185000',
-      'Duración de un neumático': '50000',
-      'Mantenimiento por kilómetro': '45,75',
-      'Valor del vehículo': '28000000',
-      'Valor al final de su vida útil': '30000000',
-      'Vida útil': '400000',
-      'Seguro': '95000',
-      'Patente': '38000',
-    };
-    for (final e in valores.entries) {
-      await tester.enterText(campo(e.key), e.value);
-    }
-    await tester.tap(find.text('Guardar costos'));
-    await tester.pumpAndSettle();
-    expect(
-        find.text('No puede superar el valor del vehículo.'), findsOneWidget);
-    verifyNever(() => repo.guardarCostos(any(), any()));
-
-    await tester.enterText(campo('Valor al final de su vida útil'), '9000000');
-    await tester.tap(find.text('Guardar costos'));
-    await tester.pumpAndSettle();
-    final c = verify(() => repo.guardarCostos('v1', captureAny()))
-        .captured
-        .single as CostosVehiculo;
-    expect(c.combustiblePrecioL, 1350.5);
-    expect(c.costoMantenimientoKm, 45.75);
-    expect(c.cantidadNeumaticos, 4);
-    expect(c.valorResidual, 9000000);
-  });
-
-  testWidgets('listado avisa los costos faltantes y desactiva', (tester) async {
+  testWidgets('listado muestra el vehículo y lo desactiva', (tester) async {
     when(() => repo.propios()).thenAnswer((_) async => [_vehiculo]);
     when(
       () => repo.cambiarActivo('v1', activo: false),
@@ -208,11 +145,8 @@ void main() {
     await montar(tester, '/v');
 
     expect(find.text('Furgón chico · AB123CD'), findsOneWidget);
-    expect(
-      find.text(
-          'Faltan los costos: sin ellos no podés ofertar con este vehículo.'),
-      findsOneWidget,
-    );
+    expect(find.textContaining('costos'), findsNothing,
+        reason: 'los costos son de referencia por tipo (D-34)');
     await tester.tap(find.byType(Switch));
     await tester.pumpAndSettle();
     verify(() => repo.cambiarActivo('v1', activo: false)).called(1);

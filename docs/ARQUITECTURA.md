@@ -129,7 +129,7 @@ Derivado de los RF y del plan de construcción (`../fletway-backend/docs/PLAN_CO
 | Pantalla | RF | Mód. |
 |---|---|---|
 | Estado de habilitación y carga de documentos | RF-01, RF-16 | 3 |
-| Mis vehículos: alta (elige el tipo, la app propone sus medidas estándar y el Transportista las corrige con las reales; peso) y costos del vehículo (pantalla aparte, con ayuda por campo) | RF-18 | 4 |
+| Mis vehículos: alta (elige el tipo, la app propone sus medidas estándar y el Transportista las corrige con las reales; peso) (los costos del vehículo son de referencia por tipo, D-34) | RF-18 | 4 |
 | Mis zonas de trabajo y disponibilidad | RN-04 | 4 |
 | Solicitudes compatibles y detalle | RF-17 | 7 |
 | Armar oferta (vehículo y ayudantes; ver precio y viajes, o el motivo si la carga no entra) | RF-17 | 8 |

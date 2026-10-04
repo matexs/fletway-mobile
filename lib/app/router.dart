@@ -9,10 +9,11 @@ import '../features/auth/presentation/login_screen.dart';
 import '../features/auth/presentation/registro_screen.dart';
 import '../features/carrier/habilitacion/presentation/habilitacion_screen.dart';
 import '../features/carrier/inicio/presentation/inicio_transportista_screen.dart';
+import '../features/carrier/ofertar/presentation/armar_oferta_screen.dart';
+import '../features/carrier/ofertar/presentation/mis_ofertas_screen.dart';
 import '../features/carrier/solicitudes/presentation/detalle_compatible_screen.dart';
 import '../features/carrier/solicitudes/presentation/solicitudes_compatibles_screen.dart';
 import '../features/carrier/vehiculo/presentation/alta_vehiculo_screen.dart';
-import '../features/carrier/vehiculo/presentation/costos_vehiculo_screen.dart';
 import '../features/carrier/vehiculo/presentation/vehiculos_screen.dart';
 import '../features/carrier/zonas/presentation/zonas_screen.dart';
 import '../features/client/solicitudes/presentation/detalle_solicitud_screen.dart';
@@ -96,12 +97,6 @@ final routerProvider = Provider<GoRouter>((ref) {
                 path: 'nuevo',
                 builder: (_, __) => const AltaVehiculoScreen(),
               ),
-              GoRoute(
-                path: ':id/costos',
-                builder: (_, state) => CostosVehiculoScreen(
-                  vehiculoId: state.pathParameters['id']!,
-                ),
-              ),
             ],
           ),
           GoRoute(path: 'zonas', builder: (_, __) => const ZonasScreen()),
@@ -114,8 +109,20 @@ final routerProvider = Provider<GoRouter>((ref) {
                 builder: (_, state) => DetalleCompatibleScreen(
                   solicitudId: state.pathParameters['id']!,
                 ),
+                routes: [
+                  GoRoute(
+                    path: 'ofertar',
+                    builder: (_, state) => ArmarOfertaScreen(
+                      solicitudId: state.pathParameters['id']!,
+                    ),
+                  ),
+                ],
               ),
             ],
+          ),
+          GoRoute(
+            path: 'ofertas',
+            builder: (_, __) => const MisOfertasScreen(),
           ),
           GoRoute(
             path: 'viajes/:id',

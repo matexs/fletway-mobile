@@ -12,7 +12,7 @@ final altaVehiculoControllerProvider =
   AltaVehiculoController.new,
 );
 
-/// Registra un vehículo (RF-18). Los costos van en un segundo paso.
+/// Registra un vehículo (RF-18). Los costos son de referencia por tipo (D-34).
 class AltaVehiculoController extends AsyncNotifier<Vehiculo?> {
   @override
   Vehiculo? build() => null;

@@ -13,7 +13,7 @@ import '../data/vehiculo_dto.dart';
 
 /// Alta de un vehículo (RF-18). Al elegir el tipo se proponen sus medidas
 /// estándar (D-32), que el Transportista corrige con las reales de la caja.
-/// Después del alta sigue la pantalla de costos.
+/// Los costos no se cargan: son de referencia por tipo (D-34).
 class AltaVehiculoScreen extends ConsumerStatefulWidget {
   /// Crea la pantalla.
   const AltaVehiculoScreen({super.key});
@@ -75,9 +75,14 @@ class _AltaVehiculoScreenState extends ConsumerState<AltaVehiculoScreen> {
     ref.listen(altaVehiculoControllerProvider, (_, siguiente) {
       switch (siguiente) {
         case AsyncData(:final value?):
-          // Segundo paso del alta: los costos.
-          context
-              .pushReplacement('/transportista/vehiculos/${value.id}/costos');
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Vehículo ${value.patente} agregado.')),
+          );
+          if (context.canPop()) {
+            context.pop();
+          } else {
+            context.go('/transportista/vehiculos');
+          }
         case AsyncError(:final error):
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(Failure.from(error).message)),
@@ -195,7 +200,7 @@ class _AltaVehiculoScreenState extends ConsumerState<AltaVehiculoScreen> {
                 ),
                 const SizedBox(height: FletwaySpacing.xl),
                 FletwayButton(
-                  texto: 'Guardar y cargar costos',
+                  texto: 'Guardar vehículo',
                   onPressed: _guardar,
                   cargando: envio.isLoading,
                   anchoCompleto: true,

@@ -1,7 +1,7 @@
 import '../../../../shared/widgets/fletway_text_field.dart';
 
-/// Validaciones de forma de los formularios de vehículo y costos. Repiten las
-/// reglas del backend (ENDPOINTS.md, "Vehículos y costos") para avisar antes de
+/// Validaciones de forma del formulario de vehículo. Repiten las reglas del
+/// backend (ENDPOINTS.md, "Vehículos") para avisar antes de
 /// enviar; el backend las vuelve a controlar.
 class ValidadoresVehiculo {
   const ValidadoresVehiculo._();

@@ -9,8 +9,8 @@ import '../../../../shared/widgets/widgets.dart';
 import '../application/disponibilidad_controller.dart';
 
 /// Inicio del Transportista habilitado: interruptor de disponibilidad (D-21) y
-/// accesos a sus vehículos (RF-18), zonas (RN-04) y documentación (RF-01). Las
-/// solicitudes compatibles se suman en el módulo 7.
+/// accesos a las solicitudes compatibles (RN-04), sus ofertas (RF-17),
+/// vehículos (RF-18), zonas y documentación (RF-01).
 class InicioTransportistaScreen extends ConsumerWidget {
   /// Crea la pantalla.
   const InicioTransportistaScreen({super.key});
@@ -73,9 +73,15 @@ class InicioTransportistaScreen extends ConsumerWidget {
               '/transportista/solicitudes',
             ),
             (
+              Icons.request_quote_outlined,
+              'Mis ofertas',
+              'Precio, estado y retiro.',
+              '/transportista/ofertas',
+            ),
+            (
               Icons.local_shipping_outlined,
               'Mis vehículos',
-              'Medidas, carga útil y costos.',
+              'Medidas y carga útil.',
               '/transportista/vehiculos',
             ),
             (

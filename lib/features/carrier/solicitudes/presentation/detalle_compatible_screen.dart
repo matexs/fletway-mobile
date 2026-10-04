@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../core/error/failure.dart';
 import '../../../../shared/design_system/design_system.dart';
@@ -10,8 +11,8 @@ import '../../../../shared/widgets/widgets.dart';
 import '../application/solicitudes_compatibles_controller.dart';
 
 /// Detalle de una solicitud compatible para el Transportista: cuándo, desde
-/// dónde, hasta dónde, el acceso y qué hay que llevar. Desde acá se va a
-/// ofertar (módulo 8).
+/// dónde, hasta dónde, el acceso y qué hay que llevar. Desde acá se arma la
+/// oferta (RF-17).
 class DetalleCompatibleScreen extends ConsumerWidget {
   /// Crea la pantalla de la solicitud [solicitudId].
   const DetalleCompatibleScreen({required this.solicitudId, super.key});
@@ -25,6 +26,20 @@ class DetalleCompatibleScreen extends ConsumerWidget {
     final solicitud = ref.watch(provider);
     return Scaffold(
       appBar: AppBar(title: const Text('Solicitud')),
+      bottomNavigationBar: solicitud.hasValue
+          ? SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.all(FletwaySpacing.lg),
+                child: FletwayButton(
+                  texto: 'Armar oferta',
+                  icono: Icons.request_quote_outlined,
+                  anchoCompleto: true,
+                  onPressed: () => context
+                      .push('/transportista/solicitudes/$solicitudId/ofertar'),
+                ),
+              ),
+            )
+          : null,
       body: solicitud.when(
         loading: () => const FletwayLoading(),
         error: (e, _) => FletwayErrorView(
