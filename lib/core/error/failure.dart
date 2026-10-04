@@ -107,6 +107,13 @@ class Failure {
           'Ya tenés una oferta vigente con ese vehículo para esta solicitud.',
         'oferta_no_encontrada' => 'No encontramos esa oferta.',
         'oferta_no_retirable' => 'Sólo se puede retirar una oferta pendiente.',
+        'oferta_no_disponible' =>
+          'Esa oferta ya no está disponible. Elegí otra de la lista.',
+        'solicitud_no_asignable' =>
+          'La solicitud ya no está publicada o venció.',
+        'transportista_inhabilitado' =>
+          'Ese transportista ya no puede tomar el viaje. Elegí otra oferta.',
+        'transportista_no_encontrado' => 'No encontramos a ese transportista.',
         _ => null,
       };
 

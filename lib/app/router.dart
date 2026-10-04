@@ -16,9 +16,12 @@ import '../features/carrier/solicitudes/presentation/solicitudes_compatibles_scr
 import '../features/carrier/vehiculo/presentation/alta_vehiculo_screen.dart';
 import '../features/carrier/vehiculo/presentation/vehiculos_screen.dart';
 import '../features/carrier/zonas/presentation/zonas_screen.dart';
+import '../features/client/ofertas/data/oferta_cliente_dto.dart';
+import '../features/client/perfil/presentation/perfil_transportista_screen.dart';
 import '../features/client/solicitudes/presentation/detalle_solicitud_screen.dart';
 import '../features/client/solicitudes/presentation/mis_solicitudes_screen.dart';
 import '../features/client/solicitudes/presentation/publicar_solicitud_screen.dart';
+import '../features/client/viaje/presentation/viaje_confirmado_screen.dart';
 
 /// Rutas de la app. Cliente y Transportista tienen árboles separados
 /// (`/cliente/...` y `/transportista/...`); el `redirect` central
@@ -64,9 +67,16 @@ final routerProvider = Provider<GoRouter>((ref) {
                 solicitudId: state.pathParameters['id']!),
           ),
           GoRoute(
-            path: 'solicitudes/:id/ofertas',
-            builder: (_, __) =>
-                const _Placeholder('Top 3 ofertas (RF-07 / RN-05)'),
+            path: 'transportistas/:id',
+            builder: (_, state) => PerfilTransportistaScreen(
+                transportistaId: state.pathParameters['id']!),
+          ),
+          GoRoute(
+            path: 'viajes/:id/confirmado',
+            builder: (_, state) => ViajeConfirmadoScreen(
+                viaje: state.extra is ViajeConfirmado
+                    ? state.extra! as ViajeConfirmado
+                    : null),
           ),
           GoRoute(
             path: 'viajes/:id',
