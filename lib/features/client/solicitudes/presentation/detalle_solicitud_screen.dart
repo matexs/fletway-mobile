@@ -8,12 +8,13 @@ import '../../../../shared/extensions/fechas.dart';
 import '../../../../shared/extensions/numeros.dart';
 import '../../../../shared/models/solicitud.dart';
 import '../../../../shared/widgets/widgets.dart';
+import '../../ofertas/presentation/widgets/ofertas_seccion.dart';
 import '../application/solicitudes_controller.dart';
 import 'widgets/estado_solicitud.dart';
 
 /// Detalle de una solicitud del Cliente, con las acciones según su estado:
-/// cancelar si está publicada y republicar si venció (D-20). Las ofertas se
-/// suman en el módulo 9.
+/// mientras está publicada, sus ofertas ordenadas por score para elegir una
+/// (RF-07, RN-05) y cancelar; si venció, republicar (D-20).
 class DetalleSolicitudScreen extends ConsumerWidget {
   /// Crea la pantalla de la solicitud [solicitudId].
   const DetalleSolicitudScreen({required this.solicitudId, super.key});
@@ -79,6 +80,18 @@ class DetalleSolicitudScreen extends ConsumerWidget {
             EstadoSolicitudChip(estado: s.estado),
             const SizedBox(height: FletwaySpacing.md),
             _Resumen(solicitud: s),
+            if (s.estado == 'publicada') ...[
+              const SizedBox(height: FletwaySpacing.xl),
+              OfertasSeccion(solicitudId: s.id),
+            ],
+            if (s.estado == 'asignada') ...[
+              const SizedBox(height: FletwaySpacing.md),
+              Text(
+                'Elegiste una oferta y el viaje está confirmado. El seguimiento '
+                'del viaje llega en la próxima versión.',
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+            ],
             const SizedBox(height: FletwaySpacing.xl),
             FletwaySeccion(
               icono: Icons.inventory_2_outlined,

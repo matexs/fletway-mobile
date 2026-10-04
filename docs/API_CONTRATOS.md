@@ -41,6 +41,8 @@
 | `POST/GET /solicitudes`, `GET /solicitudes/{id}`, `.../cancelar`, `.../republicar` | `features/client/solicitudes/data/solicitudes_repository.dart` → `Solicitud`, `SolicitudResumen`, `NuevaSolicitud`, `PuntoNuevo`, `ObjetoNuevo` (`solicitud_dto.dart`). Un objeto del catálogo manda sólo `objeto_id` y `cantidad`; ningún modelo tiene montos. |
 | `GET /transportista/solicitudes` | `features/carrier/solicitudes/data/solicitudes_compatibles_repository.dart` → `SolicitudCompatible`; el detalle (`GET /solicitudes/{id}`) usa `Solicitud` de `shared/models/solicitud.dart`, compartido con el Cliente. |
 | `POST /solicitudes/{id}/ofertas/cotizar`, `POST /solicitudes/{id}/ofertas`, `POST /ofertas/{id}/retirar`, `GET /transportista/ofertas` | `features/carrier/ofertar/data/ofertas_repository.dart` → `Cotizacion`, `Oferta`, `DesgloseOferta` (`oferta_dto.dart`). El request es `vehiculo_id` + `cantidad_ayudantes` (0..3); `carga_no_factible` trae `details.motivos`, que `Failure` lista. El desglose sólo lo ve el Transportista (D-23). |
+| `GET /solicitudes/{id}/ofertas` (top 3; `?ver_mas=true&cursor=`), `POST /ofertas/{id}/aceptar` | `features/client/ofertas/data/ofertas_cliente_repository.dart` → `OfertasDeSolicitud`, `OfertaParaCliente`, `ViajeConfirmado` (`oferta_cliente_dto.dart`). Sin desglose ni patente hasta aceptar; la patente llega en `ViajeConfirmado`. |
+| `GET /transportistas/{id}` | `features/client/perfil/data/perfil_repository.dart` → `PerfilTransportista`, `Resena` (`perfil_dto.dart`). Sin contacto ni patentes. |
 
 ---
 
@@ -48,9 +50,6 @@
 
 | Mód. | RF/RN | Endpoint (relativo a `API_BASE_URL`) | Rol | Feature en esta app | Modelo(s) Dart |
 |------|-------|--------------------------------------|-----|---------------------|----------------|
-| 9 | RF-07 / RN-05 | `GET /solicitudes/{id}/ofertas` (top 3, `?ver_mas=true`) | Cliente | `features/client/ofertas` | `OfertaConScore` (sólo `precio_calculado`, sin desglose) |
-| 9 | RF-11 | `GET /transportistas/{id}` | Cliente | `features/client/perfil` | `PerfilTransportista`, `Resena` |
-| 9 | RF-07 | `POST /ofertas/{id}/aceptar` | Cliente | `features/client/ofertas` | `Viaje` |
 | 10 | RF-21 | `GET /viajes/{id}` | ambos (del viaje) | `features/*/viaje` | `Viaje` (con PIN **sólo** para el Cliente, D-26) |
 | 10 | RN-07 | `POST /viajes/{id}/salida` | Transportista | `features/carrier/viaje` | — |
 | 10 | RF-22 / RN-06 | `POST /viajes/{id}/pin-inicio`, `POST /viajes/{id}/pin-fin` | Transportista | `features/carrier/viaje` | `PinRequest` (pin + lat/lng + precisión) |
